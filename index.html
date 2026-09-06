@@ -918,7 +918,7 @@ h1.wfall{text-shadow:0 0 22px color-mix(in srgb,var(--wc) 70%,transparent);anima
 
   <!-- TITLE — the unlocked phone. Same stat line, same mark, same centre as the lock screen. -->
   <section class="screen title-screen" id="s-title">
-    <div class="tstat"><span>LINKER OS · <b>v0.37.2</b></span><span>STATUS · <b>LINKED</b></span></div>
+    <div class="tstat"><span>LINKER OS · <b>v0.38.0</b></span><span>STATUS · <b>LINKED</b></span></div>
     <div class="tmark" id="title-mark"></div>
     <h1>Codex <span class="sub">Creatures</span></h1>
     <p class="ttag">There is a coastline rendering on the world's spare compute. Your phone can reach it.</p>
@@ -927,7 +927,7 @@ h1.wfall{text-shadow:0 0 22px color-mix(in srgb,var(--wc) 70%,transparent);anima
       <button class="trow" id="btn-new"><i>›</i><div><b>New link</b><span id="new-sub">register a new Linker</span></div></button>
       <button class="trow" id="btn-sync"><i>⇅</i><div><b>Save &amp; sync</b><span id="sync-sub">cloud · save codes · add to home screen</span></div></button>
     </div>
-    <div class="tfoot">SANCTIONED BY THE GODS OF THE CODEX · LINKER OS v0.37.2</div>
+    <div class="tfoot">SANCTIONED BY THE GODS OF THE CODEX · LINKER OS v0.38.0</div>
   </section>
 
   <!-- INTRO -->
@@ -1758,8 +1758,8 @@ function speciesRarity(sp){ return SPECIES_RARITY[sp.rarity||'common']; }
 // Layer 1 of every region is open from the start; each layer above is unlocked by beating the layer's Warden,
 // region by region. A layer is a level band, and the band decides which stages roam there.
 // ------------------------------------------------------------
-// size is the Warden's squad (and the Linkers' from layer 2 up): scans are easy, so everyone past the Relay runs a full 4 + 2; layer-1 Linkers field 3–4
-const LAYER_BANDS = [ {size:4, lvl:[4,10],  tier:1, stages:[1]},   {size:6, lvl:[14,22], tier:2, stages:[1,2]}, {size:6, lvl:[26,34], tier:2, stages:[2]},
+// size is the Warden's squad (and the Linkers' from layer 2 up): scans are easy, so everyone runs a full 4 + 2; layer-1 Linkers bench 1 or 2
+const LAYER_BANDS = [ {size:6, lvl:[4,10],  tier:1, stages:[1]},   {size:6, lvl:[14,22], tier:2, stages:[1,2]}, {size:6, lvl:[26,34], tier:2, stages:[2]},
                       {size:6, lvl:[38,48], tier:3, stages:[2,3]}, {size:6, lvl:[52,62], tier:3, stages:[3]},   {size:6, lvl:[66,78], tier:4, stages:[3,4]}, {size:6, lvl:[82,95], tier:4, stages:[4]} ];
 const LAYER_NAMES = ['Relay','Uplink','Trunk','Deep','Core','Apex','Spire'];
 const REGIONS = [
@@ -5129,7 +5129,7 @@ function buildLinkerSquad(persona, z){
   // Linkers lean 60% to the zone's own System (primary System of the region; any zone species in the Threshold), then their own leaning, then anything
   const zoneSp = z.wild.map(([id])=>SPECIES[id]).filter(s=>s.tier<=d.tier && (!z.fac || s.fac===z.fac));
   const squad=[]; const used=new Set();
-  const size = z.order===0 ? rnd.i(3,4) : d.size;   // only the Relay's Linkers go in short-handed
+  const size = z.order===0 ? ACTIVE_MAX+rnd.i(1,2) : d.size;   // the Relay's Linkers bench one or two; everyone else runs the full six
   for (let i=0;i<size;i++){
     const r=Math.random(); let cand = (zoneSp.length && r<0.6) ? zoneSp : (affine.length && r<0.85) ? affine : pool;
     // style shapes the pick: speed wants Speed, brute wants Might, tank wants Nerve
@@ -5608,12 +5608,12 @@ function wildLevel(z, s){
 }
 function wildEncounter(z, fixedId, fixedLvl, opts={}){
   const id = fixedId || weighted(z.wild); const s=SPECIES[id]; const lvl=fixedLvl || wildLevel(z,s);
-  const deepTag = opts.deep ? {apex:'Deep Signal · apex — a stage above this zone', rare:'Deep Signal · rare line', clean:'Deep Signal · clean data — quality floor 75%'}[opts.deep] : null;
+  const deepTag = opts.deep ? `Deep Signal · Lv ${lvl} · quality floor ${Math.round((opts.qFloor||DEEP_LOCK.qFloor)*100)}%` : null;
   const body=$('#enc-body'); body.innerHTML='';
   body.append(el('div',{class:'eyebrow'},deepTag ? deepTag : `Wild signal · ${z.name}`), el('div',{class:'holo-stage'}, artEl(s,150,{holo:true})),
     el('h1',{style:'font-size:28px'}, G.seen[id]?s.name:'Unknown creature'), el('div',{class:'row wrap',style:'justify-content:center'}, facChip(s), el('span',{class:'chip'},STAGES[s.tier-1].name), el('span',{class:'chip'},`Lv ${lvl}`)),
     G.seen[id]?'':el('p',{class:'muted',style:'max-width:28em'},'Your Linker has no record of this signature. Lock on to add it to the Codex.'),
-    el('div',{class:'col',style:'width:100%;max-width:280px'}, el('button',{class:'btn primary block',onclick:()=>runScan({kind:'wild',species:s,lvl,zone:z,qFloor:opts.qFloor})},'Lock signal'), el('button',{class:'btn ghost block',onclick:()=>leaveEncounter()},'Let it go')));
+    el('div',{class:'col',style:'width:100%;max-width:280px'}, el('button',{class:'btn primary block',onclick:()=>runScan({kind:'wild',species:s,lvl,zone:z,qFloor:opts.qFloor,deep:!!opts.deep})},'Lock signal'), el('button',{class:'btn ghost block',onclick:()=>leaveEncounter()},'Let it go')));
   show('s-encounter');
 }
 function kindName(k){ return k==='mod'?'a Gear card':k==='code'?'a Code':k==='area'?'an Area card':'an attack card'; }
@@ -5649,8 +5649,8 @@ function runScan(enc){
   const rar = enc.species ? speciesRarity(enc.species).idx : 0;   // rarity sets the lock, not stage: a Common Singularity locks like a Common Kernel
   const rounds = enc.kind==='cache'?2:3;
   // v0.12: faster sweep, tighter arcs, harder acceleration between rounds — Pristine should be a real feat. The Signal Lock rig track buys a little of it back.
-  scanState = { enc, round:0, rounds, results:[], angle:0, speed:(3.4 + rar*1.1 + enc.zone.order*0.08)*lockSpeedMult(), target:Math.PI*(0.6+Math.random()*1.2),
-    width:Math.max(0.2, 0.60 - rar*0.09 - enc.zone.order*0.015)*lockWidthMult(), last:performance.now(), done:false, flash:0, frozen:0, hist:[], label:'', passes:0, rot:0, penaltyFlash:0,
+  scanState = { enc, round:0, rounds, results:[], angle:0, speed:(3.4 + rar*1.1 + enc.zone.order*0.08)*lockSpeedMult()*(enc.deep?DEEP_LOCK.speed:1), target:Math.PI*(0.6+Math.random()*1.2),
+    width:Math.max(0.2, 0.60 - rar*0.09 - enc.zone.order*0.015)*lockWidthMult()*(enc.deep?DEEP_LOCK.width:1), last:performance.now(), done:false, flash:0, frozen:0, hist:[], label:'', passes:0, rot:0, penaltyFlash:0,
     parts:[], waves:[], wave:Array.from({length:64},()=>0), spike:0, ret:1, retSnap:0, reveal:0, t0:performance.now() };
   $('#scan-title').textContent = enc.species ? (G.seen[enc.species.id]?enc.species.name:'Unknown signal') : 'Data cache';
   $('#scan-hint').textContent = enc.kind==='cache' ? 'Tap LOCK as the sweep crosses the arc. Two perfects unpack a second copy.' : 'Tap LOCK as the sweep crosses the arc. White centre = perfect. Every rotation you let slip costs 5%.';
@@ -6419,40 +6419,21 @@ function enterDungeon(z){
   resumeCrawl(); setCrawlHint(`Data Dungeon open. ${G.crawl.max} moves — ${spareMoves()?'the walk to the Deep Signal plus one spare':'exactly the walk to the Deep Signal'}. Blockers are solid; go around.`);
 }
 
-// ---- Deep Signal — the prize at the far end, and it is never the same prize twice ----
-// APEX  : a creature one stage above what the zone's Linkers field, at its stage floor — the strongest thing on the board
-// RARE  : an uncommon-line species (the Wispling line) a few levels hot
-// CLEAN : a zone species with a scan-quality floor of 75% — a Sharp creature guaranteed, Pristine if you earn it
-// VAULT : two caches in one — a piece of gear and a code or card — unpacked with a single lock
+// ---- Deep Signal — the prize at the far end ----
+// SIGNAL : a creature that spawns in this zone, guaranteed at the top of the zone's level band, on a wider, slower lock with a
+//          75% quality floor — the easiest Pristine in the zone, of something that belongs there (Jake, 6 Sep: no more
+//          higher-stage prizes; a Lv 15 Daemon out of layer 1 walked over every Linker in it)
+// VAULT  : two caches in one — a piece of gear and a code or card — unpacked with a single lock
 const DEEP_KINDS = {
-  apex:  { label:'APEX',  glyph:'▲', w:3 },
-  rare:  { label:'RARE',  glyph:'✦', w:2 },
-  clean: { label:'CLEAN', glyph:'◈', w:3 },
-  vault: { label:'VAULT', glyph:'⚙︎', w:2 },
+  signal: { label:'SIGNAL', glyph:'◈', w:8 },
+  vault:  { label:'VAULT',  glyph:'⚙︎', w:2 },
 };
+const DEEP_LOCK = { speed:0.8, width:1.25, qFloor:0.75 };   // how much easier a Deep Signal lock is
 function deepSignal(z){
-  const d = ZONE_DIFF[Math.min(z.order, ZONE_DIFF.length-1)];
-  let kind = weighted(Object.entries(DEEP_KINDS).map(([k,v])=>[k,v.w]));
-  if (kind==='apex'){
-    // the strongest thing this zone could hold: a stage above its Linkers only if the zone's level band reaches that stage
-    const top = d.lvl[1]+3; const tier = (d.tier<4 && STAGE_FLOOR[d.tier] <= top+3) ? d.tier+1 : d.tier;
-    const lines = new Set(z.wild.map(([id])=>lineOf(id)));
-    let pool = Object.values(SPECIES).filter(s=>s.tier===tier && lines.has(lineOf(s.id)) && s.rarity==='common');
-    if (!pool.length) pool = Object.values(SPECIES).filter(s=>s.tier===tier && s.rarity==='common');
-    const s = rnd.pick(pool);
-    return { kind, sp:s.id, lvl:Math.max(STAGE_FLOOR[tier-1], top) };
-  }
-  if (kind==='rare'){
-    let pool = Object.values(SPECIES).filter(s=>s.rarity!=='common' && s.tier<=Math.max(1,d.tier));
-    if (!pool.length) pool = Object.values(SPECIES).filter(s=>s.rarity!=='common' && s.tier===1);
-    const s = rnd.pick(pool);
-    return { kind, sp:s.id, lvl:Math.max(STAGE_FLOOR[s.tier-1], wildLevel(z,s)+3) };
-  }
-  if (kind==='vault'){
-    return { kind, item:rollCache('mod'), extra:rollCache(weighted([['attack',60],['code',20],['area',20]])) };
-  }
-  const id = weighted(z.wild.filter(([sid])=>SPECIES[sid].rarity==='common')); const s=SPECIES[id];
-  return { kind:'clean', sp:id, lvl:wildLevel(z,s)+3, qFloor:0.75 };
+  const kind = weighted(Object.entries(DEEP_KINDS).map(([k,v])=>[k,v.w]));
+  if (kind==='vault') return { kind, item:rollCache('mod'), extra:rollCache(weighted([['attack',60],['code',20],['area',20]])) };
+  const id = weighted(z.wild); const s=SPECIES[id];
+  return { kind:'signal', sp:id, lvl:Math.max(STAGE_FLOOR[s.tier-1], z.band.lvl[1]), qFloor:DEEP_LOCK.qFloor };
 }
 // breadth-first distance from (sx,sy) over non-wall tiles; Infinity where unreachable
 function crawlDist(walls, sx, sy){
@@ -6508,7 +6489,7 @@ function crawlTileEl(t, x, y, c){
   if (adj && c.moves>0 && !c.over) cell.classList.add('step');
   if (t.seen || t.k==='deep'){
     if (t.k==='creature' && !t.done){ cell.append(artEl(SPECIES[t.sp], 34), el('span',{class:'lb'},STAGES[SPECIES[t.sp].tier-1].name.slice(0,3).toUpperCase())); }
-    else if (t.k==='deep' && !t.done){ cell.classList.add('deep'); cell.append(el('span',{class:'glyph'},DEEP_KINDS[t.kind].glyph), el('span',{class:'lb'},DEEP_KINDS[t.kind].label)); }
+    else if (t.k==='deep' && !t.done){ cell.classList.add('deep'); { const dk=DEEP_KINDS[t.kind]||DEEP_KINDS.signal; cell.append(el('span',{class:'glyph'},dk.glyph), el('span',{class:'lb'},dk.label)); } }
     else if (t.k==='cache' && !t.done){ cell.append(el('span',{class:'glyph'},t.kind==='mod'?'⚙︎':t.kind==='code'?'◈':t.kind==='area'?'▦':'▤'), el('span',{class:'lb'},'CACHE')); }
     else if (t.k==='linker' && !t.done){ cell.append(el('span',{class:'glyph'},'L'), el('span',{class:'lb'},'LINKER')); }
     else if (t.k==='bits' && !t.done){ cell.append(el('span',{class:'glyph',style:'color:var(--amber)'},'⬡'), el('span',{class:'lb'},`${t.n}`)); }
@@ -7396,7 +7377,7 @@ const MUSIC = (function(){
     S.wave={born:now, cols:RARE?FCOL:[HOLO,FCOL[0],FCOL[4],HOLO,'#fff'], again:1};
     spawnRain(); S.rainAlpha=0; (function fade(){ if(S.phase!=='decode') return; S.rainAlpha=Math.min(0.9,S.rainAlpha+0.06); if(S.rainAlpha<0.9) requestAnimationFrame(fade); })();
     // boot log
-    const lines=['> linker os 0.37.2 · secure boot','> biometric … <b>match</b>'+(handle?` · ${handle}`:''),`> mounting regions … <b>${REGIONS.length}/${REGIONS.length}</b>`,'> codex gods · handshake … <b>ok</b>',`> species index … <b>${Object.keys(SPECIES).length}</b> recorded`,'> card store … <b>decrypted</b>','> signal lock … <b>calibrated</b>',`> wardens online … <b>${ZONES.length}</b>`,`> zone … <b>${saved?ZONES[saved.zone].name:'Threshold Relay'}</b>`,'> link established'];
+    const lines=['> linker os 0.38.0 · secure boot','> biometric … <b>match</b>'+(handle?` · ${handle}`:''),`> mounting regions … <b>${REGIONS.length}/${REGIONS.length}</b>`,'> codex gods · handshake … <b>ok</b>',`> species index … <b>${Object.keys(SPECIES).length}</b> recorded`,'> card store … <b>decrypted</b>','> signal lock … <b>calibrated</b>',`> wardens online … <b>${ZONES.length}</b>`,`> zone … <b>${saved?ZONES[saved.zone].name:'Threshold Relay'}</b>`,'> link established'];
     blog.style.transition='opacity .3s'; blog.style.opacity='1';
     lines.forEach((l,i)=>setTimeout(()=>{ if(S.phase!=='decode') return; blog.append(el('span',{html:l})); while(blog.children.length>7) blog.firstChild.remove(); snd(()=>tone(1500+Math.random()*400,0.02,'square',0.02)); }, i*150));
     // faction reels: spin, then stop one by one, then strobe together
