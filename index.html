@@ -182,7 +182,7 @@ input.text{width:100%;padding:12px;border-radius:6px;background:var(--panel);bor
 .battle-top .turn{margin-left:auto;font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--holo)}
 .battle-top .turn.enemy{color:var(--danger)}
 .board-wrap{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:16px 12px;gap:8px;min-height:0}
-.board{display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(6,1fr);gap:4px;aspect-ratio:5/6;width:100%;margin:0 auto;position:relative;
+.board{display:grid;grid-template-columns:repeat(6,1fr);grid-template-rows:repeat(8,1fr);gap:4px;aspect-ratio:6/8;width:100%;margin:0 auto;position:relative;
   background:#050a14;border:1px solid var(--line2);border-radius:8px;padding:4px}
 .cell{position:relative;border:1px solid var(--line);border-radius:4px;background:#0a1222;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;overflow:hidden}
 .cell.enemy-row{background:#140d1a}
@@ -918,7 +918,7 @@ h1.wfall{text-shadow:0 0 22px color-mix(in srgb,var(--wc) 70%,transparent);anima
 
   <!-- TITLE — the unlocked phone. Same stat line, same mark, same centre as the lock screen. -->
   <section class="screen title-screen" id="s-title">
-    <div class="tstat"><span>LINKER OS · <b>v0.36.0</b></span><span>STATUS · <b>LINKED</b></span></div>
+    <div class="tstat"><span>LINKER OS · <b>v0.37.0</b></span><span>STATUS · <b>LINKED</b></span></div>
     <div class="tmark" id="title-mark"></div>
     <h1>Codex <span class="sub">Creatures</span></h1>
     <p class="ttag">There is a coastline rendering on the world's spare compute. Your phone can reach it.</p>
@@ -927,7 +927,7 @@ h1.wfall{text-shadow:0 0 22px color-mix(in srgb,var(--wc) 70%,transparent);anima
       <button class="trow" id="btn-new"><i>›</i><div><b>New link</b><span id="new-sub">register a new Linker</span></div></button>
       <button class="trow" id="btn-sync"><i>⇅</i><div><b>Save &amp; sync</b><span id="sync-sub">cloud · save codes · add to home screen</span></div></button>
     </div>
-    <div class="tfoot">SANCTIONED BY THE GODS OF THE CODEX · LINKER OS v0.36.0</div>
+    <div class="tfoot">SANCTIONED BY THE GODS OF THE CODEX · LINKER OS v0.37.0</div>
   </section>
 
   <!-- INTRO -->
@@ -1717,12 +1717,12 @@ const AREA_COLOR = a => a.fac==='multi' ? '#E6EEF8' : FACTIONS[a.fac].color;
 // MOVEMENT — each System moves its own way on the 5×4 board. Attacks are always to an adjacent cell (8 directions).
 // ------------------------------------------------------------
 const MOVE_PATTERN = {
-  lattice:{ id:'grid',   name:'Grid step',   text:'Up to 2 cells in a straight orthogonal line. Cannot pass through anything.' },
-  glitch: { id:'jump',   name:'Glitch jump', text:'A knight\'s jump: 2 cells one way, 1 the other. Passes over anything.' },
-  bloom:  { id:'spread', name:'Spread',      text:'1 cell in any direction, or to any empty cell touching an ally.' },
-  forge:  { id:'rail',   name:'Rail',        text:'Up to 2 cells straight forward or back, or 1 cell sideways. Cannot pass through anything.' },
-  void:   { id:'slip',   name:'Slip',        text:'Up to 2 cells diagonally. Cannot pass through anything.' },
-  null:   { id:'drift',  name:'Drift',       text:'1 cell in any direction.' },
+  lattice:{ id:'grid',   name:'Grid step',   text:'Up to 3 cells in a straight orthogonal line. Cannot pass through anything.' },
+  glitch: { id:'jump',   name:'Glitch jump', text:'A knight\'s jump, short or long: 2 or 3 cells one way, 1 the other. Passes over anything.' },
+  bloom:  { id:'spread', name:'Spread',      text:'Up to 2 cells in any direction, or to any empty cell touching an ally.' },
+  forge:  { id:'rail',   name:'Rail',        text:'Up to 3 cells straight forward or back, or 1 cell sideways. Cannot pass through anything.' },
+  void:   { id:'slip',   name:'Slip',        text:'Up to 3 cells diagonally. Cannot pass through anything.' },
+  null:   { id:'drift',  name:'Drift',       text:'Up to 2 cells in any direction.' },
 };
 function movePatternOf(sp){ return MOVE_PATTERN[sp.fac] || MOVE_PATTERN.null; }
 
@@ -4627,7 +4627,7 @@ ART.serapheon = SVG_OPEN + defs('se',NULL_PAL) + nullDefs('se') + `
 // ============================================================
 // ENGINE — creatures, decks, board skirmish, duels, bot AI
 // ============================================================
-const BOARD_W = 5, BOARD_H = 6;   // v0.30: six rows — two moves to contact, so the approach is a decision
+const BOARD_W = 6, BOARD_H = 8;   // v0.37: 6×8 (Jake, 6 Sep) — six rows between the lines; the long patterns reach contact on the second move
 const rnd = { f:()=>Math.random(), i:(a,b)=>a+Math.floor(Math.random()*(b-a+1)), pick:(arr)=>arr[Math.floor(Math.random()*arr.length)] };
 function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
 function weighted(list){ const tot=list.reduce((s,x)=>s+x[1],0); let r=Math.random()*tot; for(const [v,w] of list){ r-=w; if(r<=0) return v; } return list[list.length-1][0]; }
@@ -4736,7 +4736,7 @@ function buildAttackDeck(creatures, extraAttackIds){
 function copyLimit(id, inv){ return Math.min(COPY_MAX, (inv&&inv[id])||0); }   // species cards count as owned once per creature of that species
 function affordable(unit, card, free){ if (cardDead(unit,card)) return false; return free || cardCost(card)<=unit.en; }
 function botDeck(creatures, zoneOrder, tamer){
-  // species cards only for the active three (the ones that duel), then a generic core that reads like its Linker:
+  // species cards only for the active line (the ones that duel), then a generic core that reads like its Linker:
   // the squad's Systems each bring their Surge twice, their 2-cost card from layer 2 and their top card from layer 4;
   // a Linker with a System of their own runs that whole suite as far as the layer allows (Wardens run all of it);
   // and the Linker's style colours the neutrals — speed runs Pings and speed checks, brute Brute Force and might checks,
@@ -4816,7 +4816,7 @@ function drawTo(ds, n){
   }
 }
 
-const ACTIVE_MAX = 3, BENCH_MAX = 3;
+const ACTIVE_MAX = 4, BENCH_MAX = 2;   // v0.37: four on the line, two in reserve
 const EVASION_DIV = 8, EVASION_CAP = 6;            // strikes against a faster creature lose ⌊(Speed gap) ÷ 8⌋, at most 6
 // System keywords — one each, nobody else's: Order SHIELD, Chaos OVERLOAD, Growth DRAIN, Industry BURN, Secrecy STAGGER, Null DRIFT. PIERCE is the one neutral effect.
 const FX = { shield:0.35, shield2:0.5, stagger:0.25, overload:0.30, burn:0.05, burnTicks:2 };
@@ -4851,14 +4851,14 @@ class Battle {
   patternCells(u, own){
     const out=[]; const add=(x,y)=>{ if(x>=0&&y>=0&&x<BOARD_W&&y<BOARD_H) out.push({x,y}); };
     const line=(dx,dy,n)=>{ for(let i=1;i<=n;i++) add(u.x+dx*i,u.y+dy*i); };
-    const king=()=>{ for(let dy=-1;dy<=1;dy++) for(let dx=-1;dx<=1;dx++) if(dx||dy) add(u.x+dx,u.y+dy); };
+    const king=(r=1)=>{ for(let dy=-r;dy<=r;dy++) for(let dx=-r;dx<=r;dx++) if(dx||dy) add(u.x+dx,u.y+dy); };
     switch(movePatternOf(u.sp).id){
-      case 'grid':   [[1,0],[-1,0],[0,1],[0,-1]].forEach(([dx,dy])=>line(dx,dy,2)); break;
-      case 'jump':   [[1,2],[2,1],[-1,2],[-2,1],[1,-2],[2,-1],[-1,-2],[-2,-1]].forEach(([dx,dy])=>add(u.x+dx,u.y+dy)); break;
-      case 'spread': king(); if(!own) this.alive(u.side).filter(a=>a!==u).forEach(a=>{ for(let dy=-1;dy<=1;dy++) for(let dx=-1;dx<=1;dx++) if(dx||dy) add(a.x+dx,a.y+dy); }); break;
-      case 'rail':   line(0,1,2); line(0,-1,2); add(u.x+1,u.y); add(u.x-1,u.y); break;
-      case 'slip':   [[1,1],[-1,1],[1,-1],[-1,-1]].forEach(([dx,dy])=>line(dx,dy,2)); break;
-      default:       king();
+      case 'grid':   [[1,0],[-1,0],[0,1],[0,-1]].forEach(([dx,dy])=>line(dx,dy,3)); break;
+      case 'jump':   [[1,2],[2,1],[-1,2],[-2,1],[1,-2],[2,-1],[-1,-2],[-2,-1],[1,3],[3,1],[-1,3],[-3,1],[1,-3],[3,-1],[-1,-3],[-3,-1]].forEach(([dx,dy])=>add(u.x+dx,u.y+dy)); break;
+      case 'spread': king(2); if(!own) this.alive(u.side).filter(a=>a!==u).forEach(a=>{ for(let dy=-1;dy<=1;dy++) for(let dx=-1;dx<=1;dx++) if(dx||dy) add(a.x+dx,a.y+dy); }); break;
+      case 'rail':   line(0,1,3); line(0,-1,3); add(u.x+1,u.y); add(u.x-1,u.y); break;
+      case 'slip':   [[1,1],[-1,1],[1,-1],[-1,-1]].forEach(([dx,dy])=>line(dx,dy,3)); break;
+      default:       king(2);
     }
     return out;
   }
@@ -4892,14 +4892,14 @@ class Battle {
     const free=(x,y)=>x>=0&&y>=0&&x<BOARD_W&&y<BOARD_H&&!this.unitAt(x,y);
     const add=(x,y)=>{ const k=x+','+y; if(free(x,y)&&!seen.has(k)){ seen.add(k); out.push({x,y}); } };
     const line=(dx,dy,n)=>{ for(let i=1;i<=n;i++){ const x=u.x+dx*i,y=u.y+dy*i; if(!free(x,y)) break; add(x,y); } };
-    const king=()=>{ for(let dy=-1;dy<=1;dy++) for(let dx=-1;dx<=1;dx++) if(dx||dy) add(u.x+dx,u.y+dy); };
+    const king=(r=1)=>{ for(let dy=-r;dy<=r;dy++) for(let dx=-r;dx<=r;dx++) if(dx||dy) add(u.x+dx,u.y+dy); };
     switch(movePatternOf(u.sp).id){
-      case 'grid':   [[1,0],[-1,0],[0,1],[0,-1]].forEach(([dx,dy])=>line(dx,dy,2)); break;
-      case 'jump':   [[1,2],[2,1],[-1,2],[-2,1],[1,-2],[2,-1],[-1,-2],[-2,-1]].forEach(([dx,dy])=>add(u.x+dx,u.y+dy)); break;
-      case 'spread': king(); this.alive(u.side).filter(a=>a!==u).forEach(a=>{ for(let dy=-1;dy<=1;dy++) for(let dx=-1;dx<=1;dx++) if(dx||dy) add(a.x+dx,a.y+dy); }); break;
-      case 'rail':   line(0,1,2); line(0,-1,2); add(u.x+1,u.y); add(u.x-1,u.y); break;
-      case 'slip':   [[1,1],[-1,1],[1,-1],[-1,-1]].forEach(([dx,dy])=>line(dx,dy,2)); break;
-      default:       king();
+      case 'grid':   [[1,0],[-1,0],[0,1],[0,-1]].forEach(([dx,dy])=>line(dx,dy,3)); break;
+      case 'jump':   [[1,2],[2,1],[-1,2],[-2,1],[1,-2],[2,-1],[-1,-2],[-2,-1],[1,3],[3,1],[-1,3],[-3,1],[1,-3],[3,-1],[-1,-3],[-3,-1]].forEach(([dx,dy])=>add(u.x+dx,u.y+dy)); break;
+      case 'spread': king(2); this.alive(u.side).filter(a=>a!==u).forEach(a=>{ for(let dy=-1;dy<=1;dy++) for(let dx=-1;dx<=1;dx++) if(dx||dy) add(a.x+dx,a.y+dy); }); break;
+      case 'rail':   line(0,1,3); line(0,-1,3); add(u.x+1,u.y); add(u.x-1,u.y); break;
+      case 'slip':   [[1,1],[-1,1],[1,-1],[-1,-1]].forEach(([dx,dy])=>line(dx,dy,3)); break;
+      default:       king(2);
     }
     return out;
   }
@@ -5073,10 +5073,7 @@ class Battle {
     return {type:'pass'};
   }
 }
-function spreadCols(n){
-  const map = {1:[2],2:[1,3],3:[1,2,3],4:[0,1,3,4],5:[0,1,2,3,4]};
-  return map[Math.min(5,Math.max(1,n))];
-}
+function spreadCols(n){ n=Math.min(BOARD_W,Math.max(1,n)); const start=Math.floor((BOARD_W-n)/2); return Array.from({length:n},(_,i)=>start+i); }
 
 // ---- Rewards ----
 function battleRewards(playerUnits, enemyCreatures, zone, tamer, won){
@@ -5800,7 +5797,7 @@ function scanResult(s){
       if (!G.deck.attacks.length) autoBuildDeck();
       let bits = 10 + (echo?15:0); G.bits+=bits;
       body.append(el('div',{class:'eyebrow'},`Scan complete · ${qualityLabel(q)}${q>=0.9?' · holographic':''}`), el('h1',{},enc.species.name), bigCard(c,{cls:'card-lg',box:230}),
-        el('div',{class:'reward'},`Quality ${Math.round(q*100)}%${drift?` (drift −${Math.round(drift*100)}%)`:''} · +${bits} ⬡${echo?' (data echo)':''} · ${G.squad.includes(c.uid)?(G.squad.indexOf(c.uid)<ACTIVE_MAX?'added to the active three':'added to the bench'):'sent to storage'}`),
+        el('div',{class:'reward'},`Quality ${Math.round(q*100)}%${drift?` (drift −${Math.round(drift*100)}%)`:''} · +${bits} ⬡${echo?' (data echo)':''} · ${G.squad.includes(c.uid)?(G.squad.indexOf(c.uid)<ACTIVE_MAX?'added to the active line':'added to the bench'):'sent to storage'}`),
         );
       if (areaGift) body.append(el('div',{class:'reward'},`Area card found: ${areaGift.name}`), areaCardEl(areaGift));
     }
@@ -7397,7 +7394,7 @@ const MUSIC = (function(){
     S.wave={born:now, cols:RARE?FCOL:[HOLO,FCOL[0],FCOL[4],HOLO,'#fff'], again:1};
     spawnRain(); S.rainAlpha=0; (function fade(){ if(S.phase!=='decode') return; S.rainAlpha=Math.min(0.9,S.rainAlpha+0.06); if(S.rainAlpha<0.9) requestAnimationFrame(fade); })();
     // boot log
-    const lines=['> linker os 0.36.0 · secure boot','> biometric … <b>match</b>'+(handle?` · ${handle}`:''),`> mounting regions … <b>${REGIONS.length}/${REGIONS.length}</b>`,'> codex gods · handshake … <b>ok</b>',`> species index … <b>${Object.keys(SPECIES).length}</b> recorded`,'> card store … <b>decrypted</b>','> signal lock … <b>calibrated</b>',`> wardens online … <b>${ZONES.length}</b>`,`> zone … <b>${saved?ZONES[saved.zone].name:'Threshold Relay'}</b>`,'> link established'];
+    const lines=['> linker os 0.37.0 · secure boot','> biometric … <b>match</b>'+(handle?` · ${handle}`:''),`> mounting regions … <b>${REGIONS.length}/${REGIONS.length}</b>`,'> codex gods · handshake … <b>ok</b>',`> species index … <b>${Object.keys(SPECIES).length}</b> recorded`,'> card store … <b>decrypted</b>','> signal lock … <b>calibrated</b>',`> wardens online … <b>${ZONES.length}</b>`,`> zone … <b>${saved?ZONES[saved.zone].name:'Threshold Relay'}</b>`,'> link established'];
     blog.style.transition='opacity .3s'; blog.style.opacity='1';
     lines.forEach((l,i)=>setTimeout(()=>{ if(S.phase!=='decode') return; blog.append(el('span',{html:l})); while(blog.children.length>7) blog.firstChild.remove(); snd(()=>tone(1500+Math.random()*400,0.02,'square',0.02)); }, i*150));
     // faction reels: spin, then stop one by one, then strobe together
