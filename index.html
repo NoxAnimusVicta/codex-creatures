@@ -918,7 +918,7 @@ h1.wfall{text-shadow:0 0 22px color-mix(in srgb,var(--wc) 70%,transparent);anima
 
   <!-- TITLE — the unlocked phone. Same stat line, same mark, same centre as the lock screen. -->
   <section class="screen title-screen" id="s-title">
-    <div class="tstat"><span>LINKER OS · <b>v0.37.1</b></span><span>STATUS · <b>LINKED</b></span></div>
+    <div class="tstat"><span>LINKER OS · <b>v0.37.2</b></span><span>STATUS · <b>LINKED</b></span></div>
     <div class="tmark" id="title-mark"></div>
     <h1>Codex <span class="sub">Creatures</span></h1>
     <p class="ttag">There is a coastline rendering on the world's spare compute. Your phone can reach it.</p>
@@ -927,7 +927,7 @@ h1.wfall{text-shadow:0 0 22px color-mix(in srgb,var(--wc) 70%,transparent);anima
       <button class="trow" id="btn-new"><i>›</i><div><b>New link</b><span id="new-sub">register a new Linker</span></div></button>
       <button class="trow" id="btn-sync"><i>⇅</i><div><b>Save &amp; sync</b><span id="sync-sub">cloud · save codes · add to home screen</span></div></button>
     </div>
-    <div class="tfoot">SANCTIONED BY THE GODS OF THE CODEX · LINKER OS v0.37.1</div>
+    <div class="tfoot">SANCTIONED BY THE GODS OF THE CODEX · LINKER OS v0.37.2</div>
   </section>
 
   <!-- INTRO -->
@@ -1758,8 +1758,9 @@ function speciesRarity(sp){ return SPECIES_RARITY[sp.rarity||'common']; }
 // Layer 1 of every region is open from the start; each layer above is unlocked by beating the layer's Warden,
 // region by region. A layer is a level band, and the band decides which stages roam there.
 // ------------------------------------------------------------
-const LAYER_BANDS = [ {size:2, lvl:[4,10],  tier:1, stages:[1]},   {size:3, lvl:[14,22], tier:2, stages:[1,2]}, {size:4, lvl:[26,34], tier:2, stages:[2]},
-                      {size:4, lvl:[38,48], tier:3, stages:[2,3]}, {size:5, lvl:[52,62], tier:3, stages:[3]},   {size:6, lvl:[66,78], tier:4, stages:[3,4]}, {size:6, lvl:[82,95], tier:4, stages:[4]} ];   // v0.37.1: squad sizes for a four-wide line
+// size is the Warden's squad (and the Linkers' from layer 2 up): scans are easy, so everyone past the Relay runs a full 4 + 2; layer-1 Linkers field 3–4
+const LAYER_BANDS = [ {size:4, lvl:[4,10],  tier:1, stages:[1]},   {size:6, lvl:[14,22], tier:2, stages:[1,2]}, {size:6, lvl:[26,34], tier:2, stages:[2]},
+                      {size:6, lvl:[38,48], tier:3, stages:[2,3]}, {size:6, lvl:[52,62], tier:3, stages:[3]},   {size:6, lvl:[66,78], tier:4, stages:[3,4]}, {size:6, lvl:[82,95], tier:4, stages:[4]} ];
 const LAYER_NAMES = ['Relay','Uplink','Trunk','Deep','Core','Apex','Spire'];
 const REGIONS = [
   { id:'threshold', name:'Threshold Relay', fac:null,      warden:'Threshold Warden', blurb:'The relay every Linker\'s phone finds first. Creatures of every System pass through it, and the ones on the lower layers are small.',
@@ -5128,7 +5129,8 @@ function buildLinkerSquad(persona, z){
   // Linkers lean 60% to the zone's own System (primary System of the region; any zone species in the Threshold), then their own leaning, then anything
   const zoneSp = z.wild.map(([id])=>SPECIES[id]).filter(s=>s.tier<=d.tier && (!z.fac || s.fac===z.fac));
   const squad=[]; const used=new Set();
-  for (let i=0;i<d.size;i++){
+  const size = z.order===0 ? rnd.i(3,4) : d.size;   // only the Relay's Linkers go in short-handed
+  for (let i=0;i<size;i++){
     const r=Math.random(); let cand = (zoneSp.length && r<0.6) ? zoneSp : (affine.length && r<0.85) ? affine : pool;
     // style shapes the pick: speed wants Speed, brute wants Might, tank wants Nerve
     const key = persona.style==='speed'?'speed':persona.style==='brute'?'might':persona.style==='tank'?'nerve':null;
@@ -7394,7 +7396,7 @@ const MUSIC = (function(){
     S.wave={born:now, cols:RARE?FCOL:[HOLO,FCOL[0],FCOL[4],HOLO,'#fff'], again:1};
     spawnRain(); S.rainAlpha=0; (function fade(){ if(S.phase!=='decode') return; S.rainAlpha=Math.min(0.9,S.rainAlpha+0.06); if(S.rainAlpha<0.9) requestAnimationFrame(fade); })();
     // boot log
-    const lines=['> linker os 0.37.1 · secure boot','> biometric … <b>match</b>'+(handle?` · ${handle}`:''),`> mounting regions … <b>${REGIONS.length}/${REGIONS.length}</b>`,'> codex gods · handshake … <b>ok</b>',`> species index … <b>${Object.keys(SPECIES).length}</b> recorded`,'> card store … <b>decrypted</b>','> signal lock … <b>calibrated</b>',`> wardens online … <b>${ZONES.length}</b>`,`> zone … <b>${saved?ZONES[saved.zone].name:'Threshold Relay'}</b>`,'> link established'];
+    const lines=['> linker os 0.37.2 · secure boot','> biometric … <b>match</b>'+(handle?` · ${handle}`:''),`> mounting regions … <b>${REGIONS.length}/${REGIONS.length}</b>`,'> codex gods · handshake … <b>ok</b>',`> species index … <b>${Object.keys(SPECIES).length}</b> recorded`,'> card store … <b>decrypted</b>','> signal lock … <b>calibrated</b>',`> wardens online … <b>${ZONES.length}</b>`,`> zone … <b>${saved?ZONES[saved.zone].name:'Threshold Relay'}</b>`,'> link established'];
     blog.style.transition='opacity .3s'; blog.style.opacity='1';
     lines.forEach((l,i)=>setTimeout(()=>{ if(S.phase!=='decode') return; blog.append(el('span',{html:l})); while(blog.children.length>7) blog.firstChild.remove(); snd(()=>tone(1500+Math.random()*400,0.02,'square',0.02)); }, i*150));
     // faction reels: spin, then stop one by one, then strobe together
