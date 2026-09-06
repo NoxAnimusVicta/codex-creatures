@@ -918,7 +918,7 @@ h1.wfall{text-shadow:0 0 22px color-mix(in srgb,var(--wc) 70%,transparent);anima
 
   <!-- TITLE — the unlocked phone. Same stat line, same mark, same centre as the lock screen. -->
   <section class="screen title-screen" id="s-title">
-    <div class="tstat"><span>LINKER OS · <b>v0.35.3</b></span><span>STATUS · <b>LINKED</b></span></div>
+    <div class="tstat"><span>LINKER OS · <b>v0.36.0</b></span><span>STATUS · <b>LINKED</b></span></div>
     <div class="tmark" id="title-mark"></div>
     <h1>Codex <span class="sub">Creatures</span></h1>
     <p class="ttag">There is a coastline rendering on the world's spare compute. Your phone can reach it.</p>
@@ -927,7 +927,7 @@ h1.wfall{text-shadow:0 0 22px color-mix(in srgb,var(--wc) 70%,transparent);anima
       <button class="trow" id="btn-new"><i>›</i><div><b>New link</b><span id="new-sub">register a new Linker</span></div></button>
       <button class="trow" id="btn-sync"><i>⇅</i><div><b>Save &amp; sync</b><span id="sync-sub">cloud · save codes · add to home screen</span></div></button>
     </div>
-    <div class="tfoot">SANCTIONED BY THE GODS OF THE CODEX · LINKER OS v0.35.3</div>
+    <div class="tfoot">SANCTIONED BY THE GODS OF THE CODEX · LINKER OS v0.36.0</div>
   </section>
 
   <!-- INTRO -->
@@ -1763,19 +1763,19 @@ const LAYER_BANDS = [ {size:2, lvl:[4,10],  tier:1, stages:[1]},   {size:3, lvl:
 const LAYER_NAMES = ['Relay','Uplink','Trunk','Deep','Core','Apex','Spire'];
 const REGIONS = [
   { id:'threshold', name:'Threshold Relay', fac:null,      warden:'Threshold Warden', blurb:'The relay every Linker\'s phone finds first. Creatures of every System pass through it, and the ones on the lower layers are small.',
-    lines:['You came through the Relay like the rest. Show me what you brought.','Up here the signal comes in raw. Get your creatures out.','Seven Systems came through this Relay before you. Pick yours and come up.'] },
+    lines:['Everyone starts here. Show me your squad and we\'ll see if you go up.','The lower layers were easy on you. This one gets harder.','One more layer between you and the top of the Relay. Get past me.'] },
   { id:'lattice',   name:'Lattice Reach',   fac:'lattice', warden:'Lattice Warden',   blurb:'The Order System\'s territory: load-bearing geometry that goes up in proofs. The ground tiles itself where you walk, and the Spire at the top is still being proved.',
-    lines:['Your squad is standing on my lemma. Show me it holds.','Three creatures in a row. Show me the step that gets you to four.','Everything on this layer is still standing. Add yourself to it, or be corrected.'] },
+    lines:['This layer holds because I hold it. Try to move me.','Line your squad up. I\'ll take them one at a time, in order.','You have climbed a long way to be corrected. Set up.'] },
   { id:'static',    name:'Static Fringe',   fac:'glitch',  warden:'Static Warden',    blurb:'Where the Codex stops rendering. Tiles load halfway, the sky repeats, and the creatures here are built from the frames that failed.',
-    lines:['ERROR: intruder found. Correcting.','Your squad loaded in clean. Give it a minute.','I have crashed four times since you walked in. Watch what I do with the fifth.'] },
+    lines:['ERROR: intruder found. Correcting.','Your squad loaded in clean. Give it a minute.','I have crashed four times since you walked in. Watch what happens on the fifth.'] },
   { id:'verdant',   name:'Verdant Cache',   fac:'bloom',   warden:'Verdant Warden',   blurb:'A simulated ecosystem that kept growing after the sim ended. The seasons run on the Growth System\'s clock, and the canopy has closed over places the map still shows as clearings.',
-    lines:['You have been walking on roots since the Relay. Mind where you put your squad.','Everything on this layer eats. Bring yours forward.','It was spring when you started climbing. Look at the leaves.'] },
+    lines:['Mind where you put your squad. Everything on this layer eats.','It was spring when you started climbing. Look at the leaves.','Whatever gets past this layer leaves with something growing on it.'] },
   { id:'foundry',   name:'Foundry Deep',    fac:'forge',   warden:'Foundry Warden',   blurb:'The Industry System re-tooling the substrate itself. Rivet hammers under every tile, heat-haze off the floor, and the lower layers open straight onto the furnaces.',
-    lines:['Every plate on this floor was hammered flat by one of mine. Yours can start with the walls.','Your lead is sweating through its plating already. Mine has been in the kiln since the Relay.','Stand closer to the furnace. It is warmer than it looks, and so are they.'] },
+    lines:['Every plate on this floor was hammered flat by one of mine. Bring yours over.','Stand closer to the furnace. Your lead is sweating already.','The layer above is hotter than this one. Get through this one first.'] },
   { id:'cipher',    name:'Cipher Steppe',   fac:'void',    warden:'Cipher Warden',    blurb:'The Secrecy System\'s region, mapped as far as the steppe. Past the first layer the maps come back blank, and the creatures that live there are seen once, from behind.',
-    lines:['I have your handle, your squad and your last three battles. Surprise me.','I read your deck on the way up. Your third card is a mistake.','Two Linkers came up this far last rotation. I still have one of their squads.'] },
+    lines:['Say your handle. I\'ll tell you whether it matches what I have on file.','I read your deck on the way up. The third card is a mistake.','Two Linkers got this far last rotation. I kept one of their squads.'] },
   { id:'substrate', name:'Bare Substrate',  fac:'null',    warden:'Substrate Warden', blurb:'Unformatted ground beneath the Codex. Pale, flat and unlabelled, and the creatures that roam it are pale and unlabelled too, until something touches them.',
-    lines:['Raw ground. Whatever your squad is underneath, it shows here.','My squad has been three different Systems since you came in. Pick which one you are fighting.','Your Order creature is drifting. Look at its edges.'] },
+    lines:['Raw ground here. Whatever your squad is underneath, it will show.','Everything on this layer is unfinished, mine included. Bring yours anyway.','My squad changed System twice while you were climbing. Pick one and hit it.'] },
 ];
 // what a Warden says when it falls — one line per region
 const WARDEN_YIELD = {
@@ -1785,7 +1785,7 @@ const WARDEN_YIELD = {
   verdant:'Go up while the leaves are still green.',
   foundry:'That squad has been through the kiln now. The layer above is hotter.',
   cipher:'Admitted. I kept a copy of your deck.',
-  substrate:'Something touched your squad on the way through. Take it up with you.',
+  substrate:'Go up. Whatever touched your squad on the way through is going with you.',
 };
 const ZONES = [];
 REGIONS.forEach((R,ri)=>{ LAYER_BANDS.forEach((band,li)=>{
@@ -1796,7 +1796,10 @@ REGIONS.forEach((R,ri)=>{ LAYER_BANDS.forEach((band,li)=>{
     const ri2=SPECIES_RARITY[sp.rarity||'common'].idx; const minLayer = ri2===0 ? 1 : R.fac ? 1+(ri2-1)*2 : 2+ri2; if (layer<minLayer) return;   // own region: Uncommon from layer 1, Rare from 3, Legendary from 5; Threshold two layers later
     const w = (band.stages.length>1 && sp.tier===band.stages[1] ? 2 : 3) * (ri2===0 ? 1 : 0.35/ri2); wild.push([sp.id, w]); });
   // the Warden: the region's keeper at this layer, top of the band +2, fielding the layer's strongest stages (+4 was a wall in the climb sim)
-  const top=band.lvl[1]+2; const strongest=wild.filter(([id])=>SPECIES[id].tier===band.stages[band.stages.length-1] && SPECIES[id].rarity==='common');
+  // a Warden's squad is the region's own System through and through (primary System, strongest stage; commons first, then the rarer lines if the System has too few); the Threshold Warden runs a mix
+  const top=band.lvl[1]+2; const stage=band.stages[band.stages.length-1];
+  const own=wild.filter(([id])=>SPECIES[id].tier===stage && (!R.fac || SPECIES[id].fac===R.fac)); const ownCommon=own.filter(([id])=>SPECIES[id].rarity==='common');
+  const strongest = ownCommon.length>=band.size ? ownCommon : own.length ? own : wild.filter(([id])=>SPECIES[id].tier===stage);
   const picks=[]; let hh=h; const pool=(strongest.length?strongest:wild).map(([id])=>id); const left=pool.slice(); for(let i=0;i<band.size && pool.length;i++){ hh=(hh*1103515245+12345)>>>0; if(!left.length) left.push(...pool); const k=(hh>>>8)%left.length; picks.push(left.splice(k,1)[0]); }
   const squad=picks.map(id=>[id, Math.max(STAGE_FLOOR[SPECIES[id].tier-1], top)]);
   // Wardens are fragments keeping the ladder; the Gods themselves are never fought — a fight inside their realm would unmake it
@@ -5092,25 +5095,25 @@ function qualityLabel(q){ return q>=0.9?'Pristine':q>=0.72?'Clean':q>=0.5?'Stabl
 // to the zone's difficulty. Wardens are fixed per zone and appear once you've beaten three Linkers there.
 // ============================================================
 const LINKER_POOL = [
-  { id:'l_rix',    name:'Rix',      fac:null,     style:'mixed', line:'You are the third new Linker through here today. The other two lost. Come on.' },
-  { id:'l_dana',   name:'Dana_V',   fac:'lattice',style:'mixed', line:'Two Kernels and a plan. Which of yours is the plan?' },
-  { id:'l_ilse',   name:'Ilse',     fac:'bloom',  style:'tank',  line:'The Growth System likes me. It says I\'m patient.' },
-  { id:'l_corvo',  name:'Corvo',    fac:'void',   style:'speed', line:'My lead moves twice before yours has turned around. Watch it.' },
-  { id:'l_marrow', name:'Marrow',   fac:'forge',  style:'brute', line:'My ox has taken a Furnace Blast to the face and kept walking. Try something.' },
-  { id:'l_oyin',   name:'Oyin',     fac:'forge',  style:'mixed', line:'Every creature in my squad has gear I fitted myself. Look at the seams.' },
-  { id:'l_sable',  name:'Sable',    fac:'void',   style:'speed', line:'My squad is already on the board. Find it.' },
-  { id:'l_teodor', name:'Teodor',   fac:'void',   style:'mixed', line:'You checked your bench twice before you tapped Challenge. Which one are you worried about?' },
+  { id:'l_rix',    name:'Rix',      fac:null,     style:'mixed', line:'You new? I fight everyone who comes through here. Get your creatures out.' },
+  { id:'l_dana',   name:'Dana_V',   fac:'lattice',style:'mixed', line:'I run two Kernels and a plan. You\'ll see the plan about halfway through.' },
+  { id:'l_ilse',   name:'Ilse',     fac:'bloom',  style:'tank',  line:'Take your time setting up. My squad likes a long fight.' },
+  { id:'l_corvo',  name:'Corvo',    fac:'void',   style:'speed', line:'Blink and you\'ll miss the first swap. Ready?' },
+  { id:'l_marrow', name:'Marrow',   fac:'forge',  style:'brute', line:'My ox hits hard and it hits first. That\'s the whole plan.' },
+  { id:'l_oyin',   name:'Oyin',     fac:'forge',  style:'mixed', line:'Every one of mine is wearing something I fitted. Let\'s see how yours are kitted.' },
+  { id:'l_sable',  name:'Sable',    fac:'void',   style:'speed', line:'I\'ll be quick. I\'ve got two more fights after you.' },
+  { id:'l_teodor', name:'Teodor',   fac:'void',   style:'mixed', line:'Go on, set up. I like to see how a Linker lines them up before I pick who to hit.' },
   { id:'l_nine',   name:'Nine',     fac:'glitch', style:'brute', line:'ERROR: opponent not found. Oh, there you are.' },
-  { id:'l_halden', name:'Halden',   fac:'glitch', style:'mixed', line:'Your creatures are lined up very neatly. Let me get them out of order.' },
-  { id:'l_pax',    name:'Pax',      fac:'lattice',style:'tank',  line:'Forty-one battles on this layer. Sit down, this takes a while.' },
-  { id:'l_juno',   name:'Juno_88',  fac:'bloom',  style:'speed', line:'My Fernix has moved before your creatures finish loading. Keep up.' },
-  { id:'l_kestrel',name:'Kestrel',  fac:null,     style:'speed', line:'Scanned my first Kernel on a train platform with two bars of signal. Yours had it easy.' },
+  { id:'l_halden', name:'Halden',   fac:'glitch', style:'mixed', line:'Neat squad. I\'ll fix that.' },
+  { id:'l_pax',    name:'Pax',      fac:'lattice',style:'tank',  line:'I\'ve been on this layer all week. Pull up a chair, this takes a while.' },
+  { id:'l_juno',   name:'Juno_88',  fac:'bloom',  style:'speed', line:'My Fernix moves before most people finish reading the board. Try to keep up.' },
+  { id:'l_kestrel',name:'Kestrel',  fac:null,     style:'speed', line:'Where did you scan your first one? Mine was a train platform, two bars of signal.' },
   { id:'l_ambrose',name:'Ambrose',  fac:'lattice',style:'mixed', line:'Nice deck. Shame about the pilot.' },
-  { id:'l_tally',  name:'Tally',    fac:'bloom',  style:'tank',  line:'My three have fought together since the Relay. Watch how they swap.' },
-  { id:'l_vex',    name:'Vex',      fac:'glitch', style:'speed', line:'I want to see what your creature does when it panics. Bring the nervous one.' },
-  { id:'l_hollis', name:'Hollis',   fac:'forge',  style:'tank',  line:'Four gear cards in my hand before either of us has moved. Your turn.' },
-  { id:'l_mira',   name:'Mira_O',   fac:null,     style:'mixed', line:'Half my creatures are Null. Ask me after the battle which System they are.' },
-  { id:'l_quill',  name:'Quill',    fac:'void',   style:'mixed', line:'You are holding your phone with two hands. Attack deck, then.' },
+  { id:'l_tally',  name:'Tally',    fac:'bloom',  style:'tank',  line:'My three have been together since the Relay. Watch how they cover each other.' },
+  { id:'l_vex',    name:'Vex',      fac:'glitch', style:'speed', line:'I want to see what your creatures do when they panic. Send the nervous one out first.' },
+  { id:'l_hollis', name:'Hollis',   fac:'forge',  style:'tank',  line:'Gear goes on before anyone moves. Your go.' },
+  { id:'l_mira',   name:'Mira_O',   fac:null,     style:'mixed', line:'Half of mine are Null. Ask me afterwards which System they turned out to be.' },
+  { id:'l_quill',  name:'Quill',    fac:'void',   style:'mixed', line:'Attack deck, I\'m guessing. Everyone at your level runs an attack deck.' },
   { id:'l_bastion',name:'Bastion',  fac:'lattice',style:'brute', line:'Come at the wall.' },
 ];
 const ROTATION_MS = 5*60*1000;
@@ -5125,10 +5128,11 @@ function buildLinkerSquad(persona, z){
   const lo = z.order>0 ? ZONE_DIFF[z.order-1].lvl[1] : d.lvl[0]; const sqLvl = rnd.i(lo, d.lvl[1]);
   const pool = Object.values(SPECIES).filter(s=>s.tier<=d.tier && s.tier>=Math.max(1,d.tier-1));
   const affine = persona.fac ? pool.filter(s=>facsOf(s).includes(persona.fac)) : [];
-  const zoneSp = z.wild.map(([id])=>SPECIES[id]).filter(s=>s.tier<=d.tier);
+  // Linkers lean 60% to the zone's own System (primary System of the region; any zone species in the Threshold), then their own leaning, then anything
+  const zoneSp = z.wild.map(([id])=>SPECIES[id]).filter(s=>s.tier<=d.tier && (!z.fac || s.fac===z.fac));
   const squad=[]; const used=new Set();
   for (let i=0;i<d.size;i++){
-    const r=Math.random(); let cand = (affine.length && r<0.5) ? affine : (zoneSp.length && r<0.8) ? zoneSp : pool;
+    const r=Math.random(); let cand = (zoneSp.length && r<0.6) ? zoneSp : (affine.length && r<0.85) ? affine : pool;
     // style shapes the pick: speed wants Speed, brute wants Might, tank wants Nerve
     const key = persona.style==='speed'?'speed':persona.style==='brute'?'might':persona.style==='tank'?'nerve':null;
     let picks = cand.filter(s=>!used.has(s.id)); if(!picks.length) picks=cand;
@@ -5242,7 +5246,8 @@ function normalizeState(g){
   g.inv = g.inv||{}; g.inv.mods=g.inv.mods||{}; g.inv.codes=g.inv.codes||{}; g.inv.attacks=g.inv.attacks||{}; g.inv.areas=g.inv.areas||{};
   if (!g.deck){ g.deck={attacks:[], gear:[], codes:(g.codeDeck||[]).slice()}; delete g.codeDeck; }
   g.deck.attacks=g.deck.attacks||[]; g.deck.gear=g.deck.gear||[]; g.deck.codes=g.deck.codes||[]; g.deck.areas=g.deck.areas||[];
-  g.stats = Object.assign({battles:0,wins:0,scans:0}, g.stats||{}); g.seen=g.seen||{}; g.beaten=g.beaten||{}; g.zoneWins=g.zoneWins||{}; g.hailed=g.hailed||{}; g.rig=g.rig||{}; delete g.crawlNext;
+  g.stats = Object.assign({battles:0,wins:0,scans:0}, g.stats||{}); g.seen=g.seen||{}; g.beaten=g.beaten||{}; g.zoneWins=g.zoneWins||{}; g.hailed=g.hailed||{};
+  g.dscans=g.dscans||{}; if (g.dscan){ const dz=ZONES[g.dscan.zone]; if(dz) g.dscans[dz.id]=g.dscan; delete g.dscan; }   /* v0.36: one scan per zone */ g.rig=g.rig||{}; delete g.crawlNext;
   if (g.crawl && (!g.crawl.tiles || g.crawl.over)) g.crawl=null;
   if(!g.deckV2){ g.deckV2=1; g._rebuildDeck=true; }
   if (!g.areaKit && g.creatures.length){ g.creatures.slice(0,1).forEach(c=>{ const a=AREA_FOR_FAC[SPECIES[c.sp].fac]; if(a){ g.inv.areas[a]=(g.inv.areas[a]||0)+1; g.deck.areas.push(a); } }); g.areaKit=1; }
@@ -5338,7 +5343,7 @@ function showIntro(){
     body.append(el('p',{class:'muted',style:'margin-top:14px'},'Your first creature is whatever you lock onto at the Threshold Relay.'));
     body.append(el('button',{class:'btn primary block',style:'margin-top:16px',onclick:()=>{
       const h = (inp.value.trim()||'Linker').replace(/[<>]/g,'');
-      G = freshState(h); G.dscan={ zone:0, start:Date.now()-60000, end:Date.now()-1 }; save(); tab='home'; $$('#tabs button').forEach(x=>x.classList.toggle('on',x.dataset.tab==='home')); enterHub();
+      G = freshState(h); G.dscans={ [ZONES[0].id]:{ zone:0, start:Date.now()-60000, end:Date.now()-1 } }; save(); tab='home'; $$('#tabs button').forEach(x=>x.classList.toggle('on',x.dataset.tab==='home')); enterHub();
     }},'Link up'));
   };
   render(); show('s-intro');
@@ -5531,12 +5536,12 @@ function renderWorld(body){
   const hd = el('div',{class:'zone-hd',style:'margin-top:10px'}, el('div',{class:'eyebrow'},`Layer ${z.layer} of 7${z.fac?' · '+FACTIONS[z.fac].name+' territory':' · every System'}`), el('h2',{style:'margin:4px 0 6px'},z.name), el('p',{class:'muted',style:'margin:0'},z.blurb));
   body.append(hd);
   // Data Dungeon control: one scanner, one dungeon. Open run → re-enter; scan running → countdown; scan done → enter; idle → scan this zone.
-  const d=G.dscan; const scanZone = d ? ZONES[d.zone] : null;
+  const d=dscanOf(z); const scanZone = z;
   const ctl = el('div',{class:'row',style:'gap:8px;margin:12px 0;align-items:stretch'});
   if (G.crawl && !G.crawl.over) ctl.append(el('button',{class:'btn primary grow',onclick:()=>resumeCrawl()}, G.crawl.zone===z.idx?`⌖ Re-enter Data Dungeon · ${G.crawl.moves} moves left`:`⌖ Data Dungeon open in ${ZONES[G.crawl.zone].name}`));
-  else if (d && !dscanDone()){ const b=el('button',{class:'btn grow scanning',disabled:'1'},`⌖ Scanning ${scanZone.name} · ${dscanLeft()}`); ctl.append(b);
-    clearInterval(window._cdT); window._cdT=setInterval(()=>{ if(!document.body.contains(b)){ clearInterval(window._cdT); return; } if(dscanDone()){ clearInterval(window._cdT); try{ SFX.lockHit(); }catch(e){} if(tab==='world') renderTab(true); } else b.textContent=`⌖ Scanning ${scanZone.name} · ${dscanLeft()}`; },500); }
-  else if (d) ctl.append(el('button',{class:'btn primary grow',onclick:()=>enterDungeon()},`⌖ Enter Data Dungeon · ${scanZone.name}`));
+  else if (d && !dscanDone(z)){ const b=el('button',{class:'btn grow scanning',disabled:'1'},`⌖ Scanning ${scanZone.name} · ${dscanLeft(z)}`); ctl.append(b);
+    clearInterval(window._cdT); window._cdT=setInterval(()=>{ if(!document.body.contains(b)){ clearInterval(window._cdT); return; } if(dscanDone(z)){ clearInterval(window._cdT); try{ SFX.lockHit(); }catch(e){} if(tab==='world') renderTab(true); } else b.textContent=`⌖ Scanning ${scanZone.name} · ${dscanLeft(z)}`; },500); }
+  else if (d) ctl.append(el('button',{class:'btn primary grow',onclick:()=>enterDungeon(z)},`⌖ Enter Data Dungeon · ${scanZone.name}`));
   else ctl.append(el('button',{class:'btn primary grow',onclick:()=>startDscan(z)},`⌖ Scan for a Data Dungeon · ${mmss(dscanTime(z))}`));
   ctl.append(el('button',{class:'btn',title:'Linker Connection',onclick:()=>openRig()},'◎ Link'));
   body.append(ctl);
@@ -5596,7 +5601,7 @@ function wardenChallenge(z,t,enemies){
   window._wT=setTimeout(()=>{ window._wT=setInterval(()=>{ i++; line.textContent=text.slice(0,i); if(i%3===0){ try{ SFX.tick(); }catch(e){} } if(i>=text.length) clearInterval(window._wT); }, 26); }, 700);
 }
 // Exploring a zone is a Crawl now (see crawl.js). Any encounter screen exits back to the crawl if one is running.
-function explore(z){ if (G.crawl && !G.crawl.over) return resumeCrawl(); if (dscanDone()) return enterDungeon(); startDscan(z); }
+function explore(z){ if (G.crawl && !G.crawl.over) return resumeCrawl(); if (dscanDone(z)) return enterDungeon(z); startDscan(z); }
 function leaveEncounter(){ if (G && G.crawl && !G.crawl.over){ if(typeof crawlTileDone==='function') crawlTileDone(false); return resumeCrawl(); } enterHub(); }
 function wildLevel(z, s){
   const b=z.band.lvl; const base = rnd.i(Math.max(1,b[0]-3), Math.max(1,b[1]-4)); // a touch under the layer's Linkers
@@ -6395,19 +6400,22 @@ const CRAWL_WALLS = 11, CRAWL_POP = { creature:4, cache:2, linker:1, bits:2 };
 // then the dungeon is ready to enter. One scan at a time; there is no cooldown after a run — you just scan again.
 const ZONE_SCAN_MIN = [1, 2, 3, 4, 5, 6, 7];
 function dscanTime(z){ return Math.round(ZONE_SCAN_MIN[Math.min(z.order, ZONE_SCAN_MIN.length-1)]*60000*dscanMult()); }
-function dscanDone(){ return !!(G.dscan && Date.now()>=G.dscan.end); }
+// one scan per zone: every zone can have its own Data Dungeon scan running or ready
+function dscanOf(z){ G.dscans=G.dscans||{}; return G.dscans[z.id]||null; }
+function dscanDone(z){ const d=dscanOf(z); return !!(d && Date.now()>=d.end); }
 function mmss(ms){ ms=Math.max(0,ms); const m=Math.floor(ms/60000), s=Math.ceil((ms%60000)/1000); return s===60?`${m+1}:00`:`${m}:${String(s).padStart(2,'0')}`; }
-function dscanLeft(){ return G.dscan ? mmss(G.dscan.end-Date.now()) : '0:00'; }
+function dscanLeft(z){ const d=dscanOf(z); return d ? mmss(d.end-Date.now()) : '0:00'; }
 function startDscan(z){
-  if (G.dscan || (G.crawl && !G.crawl.over)) return;
-  G.dscan = { zone:z.idx, start:Date.now(), end:Date.now()+dscanTime(z) }; save();
+  if (dscanOf(z)) return;
+  G.dscans[z.id] = { zone:z.idx, start:Date.now(), end:Date.now()+dscanTime(z) }; save();
   try{ SFX.engage(); }catch(e){}
   toast(`Scanning ${z.name} · ${mmss(dscanTime(z))}`); renderTab(true);
 }
-function enterDungeon(){
+function enterDungeon(z){
   if (G.crawl && !G.crawl.over) return resumeCrawl();
-  if (!dscanDone()){ toast(`Still scanning · ${dscanLeft()}`); return; }
-  const z=ZONES[G.dscan.zone]; G.dscan=null; G.crawl=genCrawl(z); save();
+  z = z || ZONES[G.zone];
+  if (!dscanDone(z)){ toast(`Still scanning · ${dscanLeft(z)}`); return; }
+  delete G.dscans[z.id]; G.crawl=genCrawl(z); save();
   try{ SFX.engage(); }catch(e){}
   resumeCrawl(); setCrawlHint(`Data Dungeon open. ${G.crawl.max} moves — ${spareMoves()?'the walk to the Deep Signal plus one spare':'exactly the walk to the Deep Signal'}. Blockers are solid; go around.`);
 }
@@ -6702,8 +6710,8 @@ function radar(){
   const up=e=>{ if(!ptrs.has(e.pointerId)) return; ptrs.delete(e.pointerId);
     if(!moved && performance.now()-downAt<350 && ptrs.size===0){ const r=cv.getBoundingClientRect(); const sx=e.clientX-r.left, sy=e.clientY-r.top;
       // a tap on the pulsing centre tunes the scan; anywhere else pings
-      const d=G.dscan; const nearCentre=Math.hypot(sx-W/2,sy-H/2)<34;
-      if (nearCentre && d && !dscanDone()){ const inWin=((Date.now()-d.start)%HOME.pulseEvery)<HOME.pulseWin;
+      const d=dscanOf(ZONES[G.zone]); const nearCentre=Math.hypot(sx-W/2,sy-H/2)<34;
+      if (nearCentre && d && !dscanDone(ZONES[G.zone])){ const inWin=((Date.now()-d.start)%HOME.pulseEvery)<HOME.pulseWin;
         if (inWin && dscanBoostsLeft(d)>0){ d.boosts=(d.boosts||0)+1; d.end-=HOME.boostSec*1000; floatText(wrap, `−${HOME.boostSec}s`, e); try{ SFX.lockPerfect(); }catch(_){ } save(); pings.push({x:W/2,y:H/2,r:10,life:1,c:'#fff'}); }
         else { try{ SFX.tick(); }catch(_){ } pings.push({x:W/2,y:H/2,r:10,life:1,c:'rgba(255,92,92,.8)'}); }
         paint(); return; }
@@ -6714,11 +6722,11 @@ function radar(){
   // the action button is only rebuilt when the state it represents changes — rebuilding it every tick swallowed taps
   let actKey=null;
   function paint(){
-    const d=G.dscan; const crawlOpen=G.crawl && !G.crawl.over; centre.className='radar-c';
-    const key = crawlOpen ? 'open' : d ? (dscanDone() ? 'found' : 'scanning') : 'idle';
+    const d=dscanOf(z); const crawlOpen=G.crawl && !G.crawl.over; centre.className='radar-c';
+    const key = crawlOpen ? 'open' : d ? (dscanDone(z) ? 'found' : 'scanning') : 'idle';
     const rebuild = key!==actKey; actKey=key; if (rebuild) act.innerHTML='';
     if (crawlOpen){ centre.classList.add('ready'); centre.querySelector('.rt').textContent='OPEN'; centre.querySelector('.rl').textContent='DUNGEON'; hint.textContent=`Data Dungeon open · ${G.crawl.moves} moves left`; if(rebuild) act.append(el('button',{class:'btn primary',onclick:()=>resumeCrawl()},'⌖ Re-enter')); return; }
-    if (d && !dscanDone()){ centre.classList.add('scanning'); centre.querySelector('.rt').textContent=dscanLeft(); centre.querySelector('.rl').textContent='SCANNING';
+    if (d && !dscanDone(z)){ centre.classList.add('scanning'); centre.querySelector('.rt').textContent=dscanLeft(z); centre.querySelector('.rl').textContent='SCANNING';
       const inWin=((Date.now()-d.start)%HOME.pulseEvery)<HOME.pulseWin; centre.classList.toggle('pulse',inWin);
       const leftB=dscanBoostsLeft(d); hint.textContent = leftB<=0 ? `${ZONES[d.zone].name} · tuned as far as it goes` : `${ZONES[d.zone].name} · tap the centre on the pulse to tune (−${HOME.boostSec}s · ${leftB} left)`; return; }
     if (d){ centre.classList.add('ready'); centre.querySelector('.rt').textContent='FOUND'; centre.querySelector('.rl').textContent='DUNGEON'; hint.textContent='Data Dungeon found.'; if(rebuild) act.append(el('button',{class:'btn primary',onclick:()=>enterDungeon()},'⌖ Enter Data Dungeon')); return; }
@@ -6732,7 +6740,7 @@ function radar(){
     const dt=Math.min(0.05,(now-last)/1000); last=now; const T=(now-t0)/1000;
     const r=wrap.getBoundingClientRect(); if(Math.abs(r.width-W)>1||Math.abs(r.height-H)>1) size();
     if (W<20 || H<20 || document.hidden){ raf=requestAnimationFrame(frame); return; }   // not laid out yet, or the app is in the background: draw nothing
-    const d=G.dscan; const scanning=d && !dscanDone(); const prog=scanning?Math.max(0,Math.min(1,1-(d.end-Date.now())/(d.end-d.start))):(d?1:0);
+    const d=dscanOf(z); const scanning=d && !dscanDone(z); const prog=scanning?Math.max(0,Math.min(1,1-(d.end-Date.now())/(d.end-d.start))):(d?1:0);
     sweep=(sweep+dt*(scanning?1.6:0.55))%(Math.PI*2);
     ctx.clearRect(0,0,W,H);
     // hex grid in zone colour, panning with the view
@@ -6774,7 +6782,7 @@ function radar(){
     if (!reduced) raf=requestAnimationFrame(frame);
   }
   raf=requestAnimationFrame(frame);
-  clearInterval(window._ringT); window._ringT=setInterval(()=>{ if(!document.body.contains(cv)){ clearInterval(window._ringT); return; } const was=centre.classList.contains('ready'); paint(); if(!was && centre.classList.contains('ready') && G.dscan){ try{ SFX.victory(); }catch(_){ } } }, 250);
+  clearInterval(window._ringT); window._ringT=setInterval(()=>{ if(!document.body.contains(cv)){ clearInterval(window._ringT); return; } const was=centre.classList.contains('ready'); paint(); if(!was && centre.classList.contains("ready") && dscanOf(ZONES[G.zone])){ try{ SFX.victory(); }catch(_){ } } }, 250);
   return { wrap, hint, act };
 }
 
@@ -6793,7 +6801,7 @@ function signalStrip(){
   function frame(now){ if(!document.body.contains(cv)){ cancelAnimationFrame(raf); return; }
     if(Math.abs(W-box.clientWidth)>1) size();
     const T=(now-t0)/1000; if(!drag){ phase+=vel; vel*=0.94; phase+=0.02; }
-    const d=G.dscan; const scanning=d && !dscanDone(); const prog=scanning?Math.max(0,1-(d.end-Date.now())/(d.end-d.start)):0;
+    const d=dscanOf(z); const scanning=d && !dscanDone(z); const prog=scanning?Math.max(0,1-(d.end-Date.now())/(d.end-d.start)):0;
     ctx.clearRect(0,0,W,H); ctx.strokeStyle='rgba(255,255,255,.06)'; for(let x=0;x<W;x+=24){ ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke(); }
     ctx.beginPath(); ctx.strokeStyle=col; ctx.lineWidth=1.4; ctx.shadowColor=col; ctx.shadowBlur=6;
     for(let x=0;x<=W;x+=2){ const u=(x/W)*zoom*8+phase; const noise=Math.sin(u*7.3+T*2)*0.25+Math.sin(u*13.1-T*3.1)*0.12; const env=0.55+0.35*Math.sin(u*0.7); const v=(Math.sin(u*2.2)*env+noise)*(0.5+prog*0.5); const y=H/2+v*(H/2-6); x?ctx.lineTo(x,y):ctx.moveTo(x,y); }
@@ -7389,7 +7397,7 @@ const MUSIC = (function(){
     S.wave={born:now, cols:RARE?FCOL:[HOLO,FCOL[0],FCOL[4],HOLO,'#fff'], again:1};
     spawnRain(); S.rainAlpha=0; (function fade(){ if(S.phase!=='decode') return; S.rainAlpha=Math.min(0.9,S.rainAlpha+0.06); if(S.rainAlpha<0.9) requestAnimationFrame(fade); })();
     // boot log
-    const lines=['> linker os 0.35.3 · secure boot','> biometric … <b>match</b>'+(handle?` · ${handle}`:''),`> mounting regions … <b>${REGIONS.length}/${REGIONS.length}</b>`,'> codex gods · handshake … <b>ok</b>',`> species index … <b>${Object.keys(SPECIES).length}</b> recorded`,'> card store … <b>decrypted</b>','> signal lock … <b>calibrated</b>',`> wardens online … <b>${ZONES.length}</b>`,`> zone … <b>${saved?ZONES[saved.zone].name:'Threshold Relay'}</b>`,'> link established'];
+    const lines=['> linker os 0.36.0 · secure boot','> biometric … <b>match</b>'+(handle?` · ${handle}`:''),`> mounting regions … <b>${REGIONS.length}/${REGIONS.length}</b>`,'> codex gods · handshake … <b>ok</b>',`> species index … <b>${Object.keys(SPECIES).length}</b> recorded`,'> card store … <b>decrypted</b>','> signal lock … <b>calibrated</b>',`> wardens online … <b>${ZONES.length}</b>`,`> zone … <b>${saved?ZONES[saved.zone].name:'Threshold Relay'}</b>`,'> link established'];
     blog.style.transition='opacity .3s'; blog.style.opacity='1';
     lines.forEach((l,i)=>setTimeout(()=>{ if(S.phase!=='decode') return; blog.append(el('span',{html:l})); while(blog.children.length>7) blog.firstChild.remove(); snd(()=>tone(1500+Math.random()*400,0.02,'square',0.02)); }, i*150));
     // faction reels: spin, then stop one by one, then strobe together
