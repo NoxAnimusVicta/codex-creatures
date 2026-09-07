@@ -918,7 +918,7 @@ h1.wfall{text-shadow:0 0 22px color-mix(in srgb,var(--wc) 70%,transparent);anima
 
   <!-- TITLE — the unlocked phone. Same stat line, same mark, same centre as the lock screen. -->
   <section class="screen title-screen" id="s-title">
-    <div class="tstat"><span>LINKER OS · <b>v0.38.0</b></span><span>STATUS · <b>LINKED</b></span></div>
+    <div class="tstat"><span>LINKER OS · <b>v0.38.1</b></span><span>STATUS · <b>LINKED</b></span></div>
     <div class="tmark" id="title-mark"></div>
     <h1>Codex <span class="sub">Creatures</span></h1>
     <p class="ttag">There is a coastline rendering on the world's spare compute. Your phone can reach it.</p>
@@ -927,7 +927,7 @@ h1.wfall{text-shadow:0 0 22px color-mix(in srgb,var(--wc) 70%,transparent);anima
       <button class="trow" id="btn-new"><i>›</i><div><b>New link</b><span id="new-sub">register a new Linker</span></div></button>
       <button class="trow" id="btn-sync"><i>⇅</i><div><b>Save &amp; sync</b><span id="sync-sub">cloud · save codes · add to home screen</span></div></button>
     </div>
-    <div class="tfoot">SANCTIONED BY THE GODS OF THE CODEX · LINKER OS v0.38.0</div>
+    <div class="tfoot">SANCTIONED BY THE GODS OF THE CODEX · LINKER OS v0.38.1</div>
   </section>
 
   <!-- INTRO -->
@@ -5049,12 +5049,16 @@ class Battle {
       if (s>bestScore){ bestScore=s; best={type:'attack',unit:u,target:t,x:o.x,y:o.y,step:o.step}; }
     }));
     // Offensive takes any fight it can plausibly win; Defensive strikes whatever comes into reach but does not go looking until its clock runs out
-    const clock = st==='defensive' && this.round>=6;
+    // every temperament has a clock: when it runs out the bot stops respecting the enemy's reach and comes to you (Offensive early, Defensive late)
+    const clock = this.round >= (st==='offensive' ? 2 : st==='defensive' ? 6 : 4);
     const attackAt = st==='offensive' ? -12 : -8;
     if (best && bestScore>attackAt) return best;
     // move: pick the unit with the most energy that can get closer to a target
     let mv=null, mvScore=-Infinity;
     const holdRow = st==='defensive' && this.round<3;   // Defensive holds its two home rows for the first rounds, then advances
+    // reach: every cell an enemy could engage next turn (adjacent to it, or to anywhere it can step). Ending a move inside it hands the enemy the opening strike.
+    const threat=new Set(); theirs.forEach(t=>{ const spots=this.moveTargets(t).concat([{x:t.x,y:t.y}]); spots.forEach(c=>{ for(let dy=-1;dy<=1;dy++) for(let dx=-1;dx<=1;dx++) threat.add((c.x+dx)+','+(c.y+dy)); }); });
+    const threatPen = st==='offensive' ? 8 : 14;
     mine.forEach(u=>{
       const cur = Math.min(...theirs.map(t=>Math.max(Math.abs(t.x-u.x),Math.abs(t.y-u.y))));
       const covered = mine.some(a=>a!==u && Math.max(Math.abs(a.x-u.x),Math.abs(a.y-u.y))<=2 && a.energy/a.maxEnergy>=0.5);
@@ -5066,6 +5070,7 @@ class Battle {
         { const ox=u.x, oy=u.y; u.x=cell.x; u.y=cell.y; const mine2=mine.filter(a=>a!==u); const inRange = mine2.some(a=>this.swapCells(a).some(c=>c.x===cell.x&&c.y===cell.y)) || this.swapCells(u).some(c=>mine2.some(a=>a.x===c.x&&a.y===c.y)); u.x=ox; u.y=oy; if (inRange) s+=3; }
         if (st==='defensive'){ if (u.energy/u.maxEnergy<0.4 && covered && !clock) s = (dist-cur)*10 + Math.random()*2; else if (!clock) s -= 4; }  // hurt units fall back only while an ally covers; the clock ends the waiting
         if (st==='offensive') s += (cur-dist)*4;
+        if (!clock && threat.has(cell.x+','+cell.y)) s -= threatPen;   // the clock ends the standoff: a Defensive bot on the clock walks in regardless
         if (s>mvScore){ mvScore=s; mv={type:'move',unit:u,x:cell.x,y:cell.y,dist}; }
       });
     });
@@ -5215,7 +5220,7 @@ function el(tag, attrs={}, ...kids){
   kids.flat().forEach(k=>{ if(k===null||k===undefined||k===false) return; e.append(k.nodeType?k:document.createTextNode(String(k))); });
   return e;
 }
-function show(id){ $$('.screen').forEach(s=>s.classList.toggle('active', s.id===id)); }
+function show(id){ $$('.screen').forEach(s=>s.classList.toggle('active', s.id===id)); if (id!=='s-hub') $$('.hail').forEach(h=>h.remove()); }   // a Warden's hail belongs to the hub; it never rides over a scan or a battle
 let toastT; function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.add('on'); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('on'),2200); }
 const wait = ms=>new Promise(r=>setTimeout(r,ms));
 function openModal(title, body, opts={}){ $('#modal-title').textContent=title; const b=$('#modal-body'); b.innerHTML=''; b.append(...[body].flat()); $('#modal').classList.add('on'); $('#modal-x').style.visibility=opts.locked?'hidden':''; b.scrollTop=0; }
@@ -7377,7 +7382,7 @@ const MUSIC = (function(){
     S.wave={born:now, cols:RARE?FCOL:[HOLO,FCOL[0],FCOL[4],HOLO,'#fff'], again:1};
     spawnRain(); S.rainAlpha=0; (function fade(){ if(S.phase!=='decode') return; S.rainAlpha=Math.min(0.9,S.rainAlpha+0.06); if(S.rainAlpha<0.9) requestAnimationFrame(fade); })();
     // boot log
-    const lines=['> linker os 0.38.0 · secure boot','> biometric … <b>match</b>'+(handle?` · ${handle}`:''),`> mounting regions … <b>${REGIONS.length}/${REGIONS.length}</b>`,'> codex gods · handshake … <b>ok</b>',`> species index … <b>${Object.keys(SPECIES).length}</b> recorded`,'> card store … <b>decrypted</b>','> signal lock … <b>calibrated</b>',`> wardens online … <b>${ZONES.length}</b>`,`> zone … <b>${saved?ZONES[saved.zone].name:'Threshold Relay'}</b>`,'> link established'];
+    const lines=['> linker os 0.38.1 · secure boot','> biometric … <b>match</b>'+(handle?` · ${handle}`:''),`> mounting regions … <b>${REGIONS.length}/${REGIONS.length}</b>`,'> codex gods · handshake … <b>ok</b>',`> species index … <b>${Object.keys(SPECIES).length}</b> recorded`,'> card store … <b>decrypted</b>','> signal lock … <b>calibrated</b>',`> wardens online … <b>${ZONES.length}</b>`,`> zone … <b>${saved?ZONES[saved.zone].name:'Threshold Relay'}</b>`,'> link established'];
     blog.style.transition='opacity .3s'; blog.style.opacity='1';
     lines.forEach((l,i)=>setTimeout(()=>{ if(S.phase!=='decode') return; blog.append(el('span',{html:l})); while(blog.children.length>7) blog.firstChild.remove(); snd(()=>tone(1500+Math.random()*400,0.02,'square',0.02)); }, i*150));
     // faction reels: spin, then stop one by one, then strobe together
