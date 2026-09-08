@@ -925,7 +925,7 @@ h1.wfall{text-shadow:0 0 22px color-mix(in srgb,var(--wc) 70%,transparent);anima
 
   <!-- TITLE — the unlocked phone. Same stat line, same mark, same centre as the lock screen. -->
   <section class="screen title-screen" id="s-title">
-    <div class="tstat"><span>LINKER OS · <b>v0.39.0</b></span><span>STATUS · <b>LINKED</b></span></div>
+    <div class="tstat"><span>LINKER OS · <b>v0.40.0</b></span><span>STATUS · <b>LINKED</b></span></div>
     <div class="tmark" id="title-mark"></div>
     <h1>Codex <span class="sub">Creatures</span></h1>
     <p class="ttag">There is a coastline rendering on the world's spare compute. Your phone can reach it.</p>
@@ -934,7 +934,7 @@ h1.wfall{text-shadow:0 0 22px color-mix(in srgb,var(--wc) 70%,transparent);anima
       <button class="trow" id="btn-new"><i>›</i><div><b>New link</b><span id="new-sub">register a new Linker</span></div></button>
       <button class="trow" id="btn-sync"><i>⇅</i><div><b>Save &amp; sync</b><span id="sync-sub">cloud · save codes · add to home screen</span></div></button>
     </div>
-    <div class="tfoot">SANCTIONED BY THE GODS OF THE CODEX · LINKER OS v0.39.0</div>
+    <div class="tfoot">SANCTIONED BY THE GODS OF THE CODEX · LINKER OS v0.40.0</div>
   </section>
 
   <!-- INTRO -->
@@ -1803,19 +1803,30 @@ REGIONS.forEach((R,ri)=>{ LAYER_BANDS.forEach((band,li)=>{
   Object.values(SPECIES).forEach(sp=>{ if(!band.stages.includes(sp.tier)) return; const inRegion = R.fac ? hasFac(sp,R.fac) : true; if(!inRegion) return;
     const ri2=SPECIES_RARITY[sp.rarity||'common'].idx; const minLayer = ri2===0 ? 1 : R.fac ? 1+(ri2-1)*2 : 2+ri2; if (layer<minLayer) return;   // own region: Uncommon from layer 1, Rare from 3, Legendary from 5; Threshold two layers later
     const w = (band.stages.length>1 && sp.tier===band.stages[1] ? 2 : 3) * (ri2===0 ? 1 : 0.35/ri2); wild.push([sp.id, w]); });
-  // the Warden: the region's keeper at this layer, top of the band +2, fielding the layer's strongest stages (+4 was a wall in the climb sim)
+  // the Warden: the region's keeper at this layer, fielding the layer's strongest stages
   // a Warden's squad is the region's own System through and through (primary System, strongest stage; commons first, then the rarer lines if the System has too few); the Threshold Warden runs a mix
-  const top=band.lvl[1]+2; const stage=band.stages[band.stages.length-1];
+  // gym rules (Jake, 8 Sep): the squad sits at the top of the band, where the layer's strongest Linkers are, and one ace stands three levels above it and leads the line
+  const top=band.lvl[1]; const stage=band.stages[band.stages.length-1];
   const own=wild.filter(([id])=>SPECIES[id].tier===stage && (!R.fac || SPECIES[id].fac===R.fac)); const ownCommon=own.filter(([id])=>SPECIES[id].rarity==='common');
   const strongest = ownCommon.length>=band.size ? ownCommon : own.length ? own : wild.filter(([id])=>SPECIES[id].tier===stage);
   const picks=[]; let hh=h; const pool=(strongest.length?strongest:wild).map(([id])=>id); const left=pool.slice(); for(let i=0;i<band.size && pool.length;i++){ hh=(hh*1103515245+12345)>>>0; if(!left.length) left.push(...pool); const k=(hh>>>8)%left.length; picks.push(left.splice(k,1)[0]); }
-  const squad=picks.map(id=>[id, Math.max(STAGE_FLOOR[SPECIES[id].tier-1], top)]);
+  const squad=picks.map((id,i)=>[id, Math.max(STAGE_FLOOR[SPECIES[id].tier-1], top + (i===0 ? 3 : 0))]);
   // Wardens are fragments keeping the ladder; the Gods themselves are never fought — a fight inside their realm would unmake it
   const warden={ id:`w_${R.id}_${layer}`, name:`${R.warden} · ${LAYER_NAMES[li]}`, warden:true, fac:R.fac, temper: (h>>>4)%3===0 ? 'offensive' : 'defensive',
     line: R.lines[layer%R.lines.length], squad };
   ZONES.push({ id:`${R.id}_${layer}`, idx, region:R.id, regionName:R.name, layer, layerName:LAYER_NAMES[li], name:`${R.name} · ${LAYER_NAMES[li]}`, fac:R.fac, order:li, band, blurb:R.blurb, wild, tamers:[warden] });
 }); });
 function zoneAt(regionId, layer){ return ZONES.find(z=>z.region===regionId && z.layer===layer); }
+// ---- Spire scaling (Jake, 8 Sep): every Spire beaten moves the ladder of every region not yet finished toward a fully-scaled ladder
+// whose top is pinned at the cap, so each layer stays a distinct step and the Relay never moves — the second ladder is longer than
+// the first, the seventh the longest. (A flat +8 per Spire crushed Core/Apex/Spire into one Lv 99 band.) ----
+const SCALED_BANDS = [ [4,10], [20,30], [36,46], [52,62], [66,76], [80,88], [92,99] ];   // the ladder after all other Spires have fallen
+function spiresBeaten(g){ g=g||(typeof G!=='undefined'?G:null); if(!g||!g.beaten) return 0; return REGIONS.filter(r=>g.beaten[`w_${r.id}_${LAYER_BANDS.length}`]).length; }
+function spireFrac(z, g){ g=g||(typeof G!=='undefined'?G:null); if(!g) return 0; if(g.beaten && g.beaten[`w_${z.region}_${LAYER_BANDS.length}`]) return 0; return Math.min(1, spiresBeaten(g)/(REGIONS.length-1)); }
+function bandLvl(z, g){ const f=spireFrac(z,g); const b=z.band.lvl, m=SCALED_BANDS[z.layer-1]; return [Math.round(b[0]+(m[0]-b[0])*f), Math.round(b[1]+(m[1]-b[1])*f)]; }
+function zoneShift(z, g){ return bandLvl(z,g)[1]-z.band.lvl[1]; }
+// the Warden's squad at the zone's current scaling: gym rules on the scaled band (squad at its top, the ace three above, capped)
+function wardenSquad(z, g){ const top=bandLvl(z,g)[1]; const w=z.tamers.find(t=>t.warden); return w ? w.squad.map(([id],i)=>[id, Math.min(LEVEL_CAP, Math.max(STAGE_FLOOR[SPECIES[id].tier-1], top+(i===0?3:0)))]) : []; }
 function regionOf(z){ return REGIONS.find(r=>r.id===z.region); }
 
 
@@ -5135,7 +5146,7 @@ function buildLinkerSquad(persona, z){
   const d = ZONE_DIFF[Math.min(z.order, ZONE_DIFF.length-1)];
   // a layer's Linkers run from the top of the band below to the top of this one, and a squad shares one level (±2):
   // the rotation always holds an easier fight and a harder one, and the avg Lv on the card says which is which
-  const lo = z.order>0 ? ZONE_DIFF[z.order-1].lvl[1] : d.lvl[0]; const sqLvl = rnd.i(lo, d.lvl[1]);
+  const bl = bandLvl(z); const lo = z.order>0 ? bandLvl(zoneAt(z.region, z.layer-1))[1] : bl[0]; const sqLvl = rnd.i(lo, bl[1]);   // Spire scaling moves the bands; the layer below's top is still the floor
   const pool = Object.values(SPECIES).filter(s=>s.tier<=d.tier && s.tier>=Math.max(1,d.tier-1));
   const affine = persona.fac ? pool.filter(s=>facsOf(s).includes(persona.fac)) : [];
   // Linkers lean 60% to the zone's own System (primary System of the region; any zone species in the Threshold), then their own leaning, then anything
@@ -5149,7 +5160,7 @@ function buildLinkerSquad(persona, z){
     let picks = cand.filter(s=>!used.has(s.id)); if(!picks.length) picks=cand;
     if (key) picks = picks.slice().sort((a,b)=>b.stats[key][1]-a.stats[key][1]).slice(0, Math.max(2, Math.ceil(picks.length/2)));
     const s = rnd.pick(picks); used.add(s.id);
-    const lvl = Math.max(STAGE_FLOOR[s.tier-1], Math.min(d.lvl[1], sqLvl + rnd.i(-2,2)));
+    const lvl = Math.max(STAGE_FLOOR[s.tier-1], Math.min(bl[1], sqLvl + rnd.i(-2,2)));
     squad.push([s.id, lvl]);
   }
   return squad;
@@ -5541,12 +5552,13 @@ function renderWorld(body){
   // the ladder: every layer of this region, locked ones included, so the climb is always visible
   const lad = el('div',{class:'ladder'});
   for (let li=LAYER_BANDS.length-1; li>=0; li--){ const z=zoneAt(R.id, li+1); const open = li<=unlockedLayer(R.id); const isCur = z.idx===G.zone; const b=z.band;
-    const stages = b.stages.map(t=>STAGES[t-1].name).join(' / ');
+    const stages = b.stages.map(t=>STAGES[t-1].name).join(' / '); const bl=bandLvl(z);
     lad.append(el('button',{class:'lay'+(isCur?' on':'')+(open?'':' locked'),onclick:()=>{ if(!open){ toast(`Beat the ${LAYER_NAMES[li-1]} Warden of ${R.name} to open this layer.`); return; } G.zone=z.idx; save(); renderTab(); }},
-      el('span',{class:'ln'},`${li+1}`), el('div',{class:'grow'}, el('div',{class:'nm'},z.layerName), el('div',{class:'sub'},`Lv ${b.lvl[0]}–${b.lvl[1]} · ${stages}`)), el('span',{class:'mono st'}, open ? (isCur?'HERE':'OPEN') : '🔒'))); }
+      el('span',{class:'ln'},`${li+1}`), el('div',{class:'grow'}, el('div',{class:'nm'},z.layerName), el('div',{class:'sub'},`Lv ${bl[0]===bl[1]?bl[0]:bl[0]+'–'+bl[1]} · ${stages}`)), el('span',{class:'mono st'}, open ? (isCur?'HERE':'OPEN') : '🔒'))); }
   body.append(lad);
   const z = ZONES[G.zone];
   const hd = el('div',{class:'zone-hd',style:'margin-top:10px'}, el('div',{class:'eyebrow'},`Layer ${z.layer} of 7${z.fac?' · '+FACTIONS[z.fac].name+' territory':' · every System'}`), el('h2',{style:'margin:4px 0 6px'},z.name), el('p',{class:'muted',style:'margin:0'},z.blurb));
+  { const sh=zoneShift(z); if (sh>0) hd.append(el('div',{class:'mono',style:'color:var(--amber);font-size:11px;letter-spacing:.14em;margin-top:6px'},`SPIRE SCALING · +${sh} LEVELS · ${spiresBeaten()} SPIRE${spiresBeaten()===1?'':'S'} BEATEN`)); }
   body.append(hd);
   // Data Dungeon control: one scanner, one dungeon. Open run → re-enter; scan running → countdown; scan done → enter; idle → scan this zone.
   const d=dscanOf(z); const scanZone = z;
@@ -5562,8 +5574,8 @@ function renderWorld(body){
   const roster = zoneLinkers(z); const wins = zoneWinCount(z); const warden = wardenOf(z);
   body.append(el('div',{class:'row',style:'justify-content:space-between;align-items:baseline;margin-bottom:8px'}, el('h3',{style:'margin:0'},'Linkers'), el('span',{class:'mono muted rot',style:'font-size:10px;letter-spacing:.14em'},`ROTATION IN ${rotationText()}`)));
   const list = el('div',{class:'list'});
-  const row=(t,locked)=>{ const beat=!!(G.zoneWins&&G.zoneWins[z.id]&&G.zoneWins[z.id][t.id]) || (t.warden&&G.beaten[t.id]); const lv=Math.round(t.squad.reduce((s,x)=>s+x[1],0)/t.squad.length);
-    return el('div',{class:'tamer'+(t.warden?' warden':'')}, el('div',{class:'av'+(t.fac?' fac-'+t.fac:'')},t.warden?'W':t.name[0]), el('div',{class:'grow'}, el('div',{class:'nm'},t.name), el('div',{class:'sub'},`${t.squad.length} creatures · ${t.warden?'Lv '+t.squad[0][1]:'avg Lv '+lv}${t.fac?' · '+FACTIONS[t.fac].name:''}${beat?' · beaten':''}`)),
+  const row=(t,locked)=>{ const beat=!!(G.zoneWins&&G.zoneWins[z.id]&&G.zoneWins[z.id][t.id]) || (t.warden&&G.beaten[t.id]); const sq=t.warden?wardenSquad(z):t.squad; const lv=Math.round(sq.reduce((s,x)=>s+x[1],0)/sq.length);
+    return el('div',{class:'tamer'+(t.warden?' warden':'')}, el('div',{class:'av'+(t.fac?' fac-'+t.fac:'')},t.warden?'W':t.name[0]), el('div',{class:'grow'}, el('div',{class:'nm'},t.name), el('div',{class:'sub'},`${sq.length} creatures · ${t.warden?'Lv '+sq[0][1]:'avg Lv '+lv}${t.fac?' · '+FACTIONS[t.fac].name:''}${beat?' · beaten':''}`)),
       el('button',{class:'btn small'+(locked||!canBattle()?'':' primary'),disabled:locked||!canBattle()?'1':null,onclick:()=>challenge(z,t)}, locked?'Locked':canBattle()?'Challenge':'No creature')); };
   roster.forEach(t=>list.append(row(t,false)));
   if (warden) list.append(row(warden, wins<WARDEN_WINS));
@@ -5577,7 +5589,7 @@ function renderWorld(body){
 }
 function challenge(z,t){
   if (!canBattle()){ toast('You need a creature in an active slot first.'); return; }
-  const enemies = t.squad.map(([id,lv])=>botCreature(id,lv,z.order));
+  const enemies = (t.warden ? wardenSquad(z) : t.squad).map(([id,lv])=>botCreature(id,lv,z.order));
   if (t.warden) return wardenChallenge(z,t,enemies);
   const st=BOT_STYLES[botStyle(t)];
   openModal(t.name, [ el('p',{style:'font-size:16px'},`“${t.line}”`), el('div',{class:'row',style:'gap:6px;align-items:center;margin-bottom:6px'}, el('span',{class:'chip style-'+botStyle(t)},st.name), el('span',{class:'muted',style:'font-size:12px'},st.text)), el('div',{class:'row wrap'}, enemies.map(c=>el('span',{class:`chip fac fac-${SPECIES[c.sp].fac}`},`${SPECIES[c.sp].name} Lv${c.lvl}`))),
@@ -5617,7 +5629,7 @@ function wardenChallenge(z,t,enemies){
 function explore(z){ if (G.crawl && !G.crawl.over) return resumeCrawl(); if (dscanDone(z)) return enterDungeon(z); startDscan(z); }
 function leaveEncounter(){ if (G && G.crawl && !G.crawl.over){ if(typeof crawlTileDone==='function') crawlTileDone(false); return resumeCrawl(); } enterHub(); }
 function wildLevel(z, s){
-  const b=z.band.lvl; const base = rnd.i(Math.max(1,b[0]-3), Math.max(1,b[1]-4)); // a touch under the layer's Linkers
+  const b=bandLvl(z); const base = rnd.i(Math.max(1,b[0]-3), Math.max(1,b[1]-4)); // a touch under the layer's Linkers
   return Math.max(base, STAGE_FLOOR[s.tier-1]);
 }
 function wildEncounter(z, fixedId, fixedLvl, opts={}){
@@ -6448,7 +6460,7 @@ function deepSignal(z){
   const kind = weighted(Object.entries(DEEP_KINDS).map(([k,v])=>[k,v.w]));
   if (kind==='vault') return { kind, item:rollCache('mod'), extra:rollCache(weighted([['attack',60],['code',20],['area',20]])) };
   const id = weighted(z.wild); const s=SPECIES[id];
-  return { kind:'signal', sp:id, lvl:Math.max(STAGE_FLOOR[s.tier-1], z.band.lvl[1]), qFloor:DEEP_LOCK.qFloor };
+  return { kind:'signal', sp:id, lvl:Math.max(STAGE_FLOOR[s.tier-1], bandLvl(z)[1]), qFloor:DEEP_LOCK.qFloor };
 }
 // breadth-first distance from (sx,sy) over non-wall tiles; Infinity where unreachable
 // cheapest walk from (sx,sy) over non-wall tiles, a hazard tile costing 2 to enter; Infinity where unreachable
@@ -7449,7 +7461,7 @@ const MUSIC = (function(){
     S.wave={born:now, cols:RARE?FCOL:[HOLO,FCOL[0],FCOL[4],HOLO,'#fff'], again:1};
     spawnRain(); S.rainAlpha=0; (function fade(){ if(S.phase!=='decode') return; S.rainAlpha=Math.min(0.9,S.rainAlpha+0.06); if(S.rainAlpha<0.9) requestAnimationFrame(fade); })();
     // boot log
-    const lines=['> linker os 0.39.0 · secure boot','> biometric … <b>match</b>'+(handle?` · ${handle}`:''),`> mounting regions … <b>${REGIONS.length}/${REGIONS.length}</b>`,'> codex gods · handshake … <b>ok</b>',`> species index … <b>${Object.keys(SPECIES).length}</b> recorded`,'> card store … <b>decrypted</b>','> signal lock … <b>calibrated</b>',`> wardens online … <b>${ZONES.length}</b>`,`> zone … <b>${saved?ZONES[saved.zone].name:'Threshold Relay'}</b>`,'> link established'];
+    const lines=['> linker os 0.40.0 · secure boot','> biometric … <b>match</b>'+(handle?` · ${handle}`:''),`> mounting regions … <b>${REGIONS.length}/${REGIONS.length}</b>`,'> codex gods · handshake … <b>ok</b>',`> species index … <b>${Object.keys(SPECIES).length}</b> recorded`,'> card store … <b>decrypted</b>','> signal lock … <b>calibrated</b>',`> wardens online … <b>${ZONES.length}</b>`,`> zone … <b>${saved?ZONES[saved.zone].name:'Threshold Relay'}</b>`,'> link established'];
     blog.style.transition='opacity .3s'; blog.style.opacity='1';
     lines.forEach((l,i)=>setTimeout(()=>{ if(S.phase!=='decode') return; blog.append(el('span',{html:l})); while(blog.children.length>7) blog.firstChild.remove(); snd(()=>tone(1500+Math.random()*400,0.02,'square',0.02)); }, i*150));
     // faction reels: spin, then stop one by one, then strobe together
