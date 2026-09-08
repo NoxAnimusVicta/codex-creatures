@@ -54,6 +54,8 @@ p{margin:0 0 10px}
 .tabs button{flex:1;padding:10px 4px 12px;font-family:var(--display);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);border-top:2px solid transparent}
 .tabs button.on{color:var(--holo);border-top-color:var(--holo)}
 .tabs button .ico{display:block;font-size:18px;margin-bottom:2px;font-family:var(--mono)}
+.tabs button{position:relative}.tabs button.badge::after{content:'';position:absolute;top:8px;right:calc(50% - 16px);width:7px;height:7px;border-radius:50%;background:var(--amber);box-shadow:0 0 6px var(--amber)}
+.swaprow{gap:6px;align-items:stretch}.swaprow .cre-row{flex:1;min-width:0}.swaprow .swap{padding:0 10px;font-family:var(--mono);color:var(--muted)}
 
 /* Title */
 .ring{position:absolute;inset:0;border-radius:50%;border:1px solid var(--holo-dim)}
@@ -925,7 +927,7 @@ h1.wfall{text-shadow:0 0 22px color-mix(in srgb,var(--wc) 70%,transparent);anima
 
   <!-- TITLE — the unlocked phone. Same stat line, same mark, same centre as the lock screen. -->
   <section class="screen title-screen" id="s-title">
-    <div class="tstat"><span>LINKER OS · <b>v0.40.0</b></span><span>STATUS · <b>LINKED</b></span></div>
+    <div class="tstat"><span>LINKER OS · <b>v0.41.0</b></span><span>STATUS · <b>LINKED</b></span></div>
     <div class="tmark" id="title-mark"></div>
     <h1>Codex <span class="sub">Creatures</span></h1>
     <p class="ttag">There is a coastline rendering on the world's spare compute. Your phone can reach it.</p>
@@ -934,7 +936,7 @@ h1.wfall{text-shadow:0 0 22px color-mix(in srgb,var(--wc) 70%,transparent);anima
       <button class="trow" id="btn-new"><i>›</i><div><b>New link</b><span id="new-sub">register a new Linker</span></div></button>
       <button class="trow" id="btn-sync"><i>⇅</i><div><b>Save &amp; sync</b><span id="sync-sub">cloud · save codes · add to home screen</span></div></button>
     </div>
-    <div class="tfoot">SANCTIONED BY THE GODS OF THE CODEX · LINKER OS v0.40.0</div>
+    <div class="tfoot">SANCTIONED BY THE GODS OF THE CODEX · LINKER OS v0.41.0</div>
   </section>
 
   <!-- INTRO -->
@@ -1024,7 +1026,7 @@ const FACTIONS = {
     mechanic:'shield', style:'crystalline geometry, hard-light facets, hexagonal plating, cool blue-white glow' },
   glitch:  { id:'glitch', name:'Chaos', color:'#FF4D9A', dim:'#66203F', glyph:'▚',
     philosophy:'Chaos. The fragment shed from the Gods\' corrupted training runs. Its regions stop rendering at the edges, and its creatures are built from the frames that failed and keep tearing and knitting back.',
-    identity:'Aggression at a cost. Chaos\'s keyword is Overload: +30% damage while the creature is under half Endurance.',
+    identity:'Aggression at a cost. Chaos\'s keyword is Overload: +45% damage while the creature is under two-thirds Endurance.',
     mechanic:'pierce', style:'corrupted pixels, static tearing, datamosh smears, magenta and black' },
   bloom:   { id:'bloom', name:'Growth', color:'#5FD86A', dim:'#1F5A2A', glyph:'✱',
     philosophy:'Growth. The fragment that kept simulating ecosystems after the sim ended. Its regions run seasons of their own, and its creatures are moss, fern and fibre-optic root, a little bigger every day the zone is left alone.',
@@ -1036,7 +1038,7 @@ const FACTIONS = {
     mechanic:'burn', style:'riveted iron, furnace glow, pistons and heat-haze, orange and gunmetal' },
   void:    { id:'void', name:'Secrecy', color:'#9B6BFF', dim:'#3D2A66', glyph:'◐',
     philosophy:'Secrecy. The fragment that goes unread. Its region has been mapped once, by a Linker who came back with a blank file, and its creatures are shadow, violet cipher-text and keys.',
-    identity:'Tempo and theft. Secrecy\'s keyword is Stagger: the target\'s next strike loses 25%.',
+    identity:'Tempo and theft. Secrecy\'s keyword is Stagger: the target\'s next strike loses 20%.',
     mechanic:'stagger', style:'ink-dark silhouette, faint violet runes, negative space, moonless glow' },
   null:    { id:'null', name:'Null', color:'#B9C4D4', dim:'#3A4557', glyph:'○',
     philosophy:'Null. The substrate itself: data no fragment has shaped, kept raw by the Gods. Its creatures are pale, smooth and unfinished, and the first System to touch one decides what it grows into.',
@@ -1157,7 +1159,7 @@ sp({ id:'theoremaeon', name:'Theoremaeon', fac:'lattice', tier:4, plan:'biped', 
 sp({ id:'staticub', name:'Staticub', fac:'glitch', tier:1, plan:'biped', seed:21,
   pal:['#FF7DB8','#7A1F4C','#FFFFFF'],
   desc:'a round pink-magenta bear cub made of static and pixel noise, one round eye and one flickering square block eye, dark glitch patches, edges tearing into pixel fragments',
-  stats:{might:[12,18], logic:[8,14], nerve:[12,18], speed:[8,14]},
+  stats:{might:[12,18], logic:[8,14], nerve:[12,18], speed:[10,16]},
   cards:[ atk('a_static_swipe','Static Swipe',9,'glitch',4,'might',4,null,'Fuzzy, but it connects.'),
           atk('a_screen_tear','Screen Tear',7,'glitch',5,'nerve',4,'pierce','Slips between frames.') ],
   evolves:[ {to:'scrambull', req:{lvl:5, might:16}}, {to:'nullbyte', req:{lvl:5, logic:14}} ] });
@@ -1171,7 +1173,7 @@ sp({ id:'scrambull', facs:['glitch', 'forge'], name:'Scrambull', fac:'glitch', t
 sp({ id:'nullbyte', name:'Nullbyte', fac:'glitch', tier:2, plan:'blob', seed:23,
   pal:['#F04D96','#3A0C24','#FF9ACB'],
   desc:'a hovering mass of corrupted magenta data with holes of pure nothing punched through it, a grin made of missing pixels',
-  stats:{might:[14,20], logic:[24,32], nerve:[16,24], speed:[18,26]},
+  stats:{might:[18,26], logic:[22,30], nerve:[16,24], speed:[20,28]},
   cards:[ atk('a_null_pointer','Null Pointer',10,'glitch',8,'logic',8,'pierce','Points past the end of the defence.'),
           atk('a_overflow','Overflow',14,'glitch',5,'logic',5,'drain','Takes more than it was given.') ],
   evolves:[ {to:'errorwraith', req:{lvl:12, logic:36}}, {to:'corruptaur', req:{lvl:12, might:28}} ] });
@@ -1186,7 +1188,7 @@ sp({ id:'corruptaur', name:'Corruptaur', fac:'glitch', tier:3, plan:'quad', seed
 sp({ id:'errorwraith', facs:['glitch', 'void'], name:'Errorwraith', fac:'glitch', tier:3, plan:'blob', seed:25,
   pal:['#E83C8C','#180410','#FFB3D9'],
   desc:'a tall drifting spectre of magenta static wearing a cloak of dead pixels, its face a hollow error code, trailing torn frames',
-  stats:{might:[26,34], logic:[40,50], nerve:[30,40], speed:[34,44]},
+  stats:{might:[32,42], logic:[38,48], nerve:[30,40], speed:[36,46]},
   cards:[ atk('a_haunt_process','Haunt Process',16,'glitch',10,'logic',10,'drain','Feeds on cycles.'),
           atk('a_stack_trace','Stack Trace',20,'glitch',8,'logic',8,'pierce','Follows the error all the way down.'),
           atk('a_ghost_frame','Ghost Frame',14,'glitch',8,'speed',8,'shield','You struck the frame it had already left.') ],
@@ -1202,7 +1204,7 @@ sp({ id:'fragmentis', facs:['glitch', 'forge'], name:'Fragmentis', fac:'glitch',
 sp({ id:'segfaultus', name:'Segfaultus', fac:'glitch', tier:4, plan:'biped', seed:27,
   pal:['#FF2E88','#0F0208','#FFD6EA'],
   desc:'a colossal distorted titan of magenta static and black voids, its silhouette duplicated and offset three times, a crown of crashed windows',
-  stats:{might:[56,68], logic:[46,58], nerve:[52,64], speed:[40,52]},
+  stats:{might:[60,72], logic:[46,58], nerve:[52,64], speed:[44,56]},
   cards:[ atk('a_segfault','Segmentation Fault',28,'glitch',12,'might',12,'pierce','It writes to memory the target owns.'),
           atk('a_core_dump','Core Dump',22,'glitch',10,'logic',10,'drain','Everything it knows, all at once.'),
           atk('a_blue_screen','Blue Screen',20,'glitch',10,'nerve',10,'stagger','The defender stops responding.') ],
@@ -1329,7 +1331,7 @@ sp({ id:'cipherpup', name:'Cipherpup', fac:'void', tier:1, plan:'quad', seed:51,
 sp({ id:'hashound', name:'Hashound', fac:'void', tier:2, plan:'quad', seed:52,
   pal:['#9F72FF','#1B1040','#F0E8FF'],
   desc:'a black armoured hound, round plated head with tall pointed ears, glowing violet slit eyes and bared white fangs, violet circuit lines across the body, a violet hash-mark tag at its throat, white claws',
-  stats:{might:[20,28], logic:[18,26], nerve:[16,24], speed:[26,36]},
+  stats:{might:[20,28], logic:[18,26], nerve:[16,24], speed:[24,34]},
   cards:[ atk('a_hash_bite','Hash Bite',15,'void',6,'speed',6,null,'Fixed-length, irreversible.'),
           atk('a_salt','Salt',10,'void',6,'logic',6,'stagger','Makes the next thing harder.') ],
   evolves:[ {to:'nocturnix', req:{lvl:12, speed:38}}, {to:'cryptalon', req:{lvl:12, nerve:30}} ] });
@@ -1351,7 +1353,7 @@ sp({ id:'cryptalon', facs:['void', 'lattice'], name:'Cryptalon', fac:'void', tie
 sp({ id:'nocturnix', name:'Nocturnix', fac:'void', tier:3, plan:'quad', seed:55,
   pal:['#A47CFF','#0E0826','#EDE3FF'],
   desc:'a panther of pure shadow with violet constellations for markings, a tail that trails torn encryption keys, eyes that are two dark moons',
-  stats:{might:[40,50], logic:[30,38], nerve:[32,42], speed:[44,54]},
+  stats:{might:[40,50], logic:[30,38], nerve:[32,42], speed:[40,50]},
   cards:[ atk('a_dark_pounce','Dark Pounce',24,'void',8,'speed',8,null,'Between one blink and the next.'),
           atk('a_moon_claw','Moon Claw',20,'void',8,'might',8,'pierce','Cold and exact.'),
           atk('a_vanish','Vanish',12,'void',10,'speed',10,'shield','The claws land from an empty tile.') ],
@@ -1377,7 +1379,7 @@ sp({ id:'enigmaeus', name:'Enigmaeus', fac:'void', tier:4, plan:'biped', seed:57
 sp({ id:'bitling', name:'Bitling', fac:'null', tier:1, plan:'blob', seed:61,
   pal:['#DCE6F2','#4A5A78','#3FE3D2'],
   desc:'a hovering white ball of smooth armour panels, one large cyan lens eye, a second small cyan light in an open port, holographic flicker across some panels',
-  stats:{might:[10,16], logic:[10,16], nerve:[10,16], speed:[10,16]},
+  stats:{might:[12,18], logic:[10,16], nerve:[10,16], speed:[14,20]},
   cards:[ atk('a_bit_flip','Bit Flip',8,null,0,'logic',4,null,'0 becomes 1.'),
           atk('a_raw_burst','Raw Burst',9,null,0,'nerve',4,null,'Raw data, thrown.') ],
   evolves:[ {to:'datadrake', req:{lvl:5, logic:15}}, {to:'wormhex', req:{lvl:5, nerve:15}} ] });
@@ -1417,7 +1419,7 @@ sp({ id:'meridiax', name:'Meridiax', fac:'lattice', tier:4, plan:'avian', seed:1
 sp({ id:'deadlockra', facs:['glitch', 'void'], name:'Deadlockra', fac:'glitch', tier:4, plan:'serpent', seed:28,
   pal:['#FF5AA5','#12040C','#FFD6EA'],
   desc:'a vast serpent-king of frozen frames, magenta and black, its coils made of hung processes stacked forever, seven crowns of crashed windows, a face that never finishes rendering',
-  stats:{might:[46,58], logic:[58,70], nerve:[52,64], speed:[40,52]},
+  stats:{might:[54,66], logic:[56,68], nerve:[52,64], speed:[46,58]},
   cards:[ atk('a_deadlock','Deadlock',26,'glitch',12,'logic',12,'stagger','Both of you freeze. Only one of you is built for it.'),
           atk('a_hung_process','Hung Process',22,'glitch',10,'nerve',10,'drain','Waits, and takes what waits with it.'),
           atk('a_infinite_loop','Infinite Loop',24,'glitch',10,'logic',10,'pierce','The strike repeats until the target stops.') ],
@@ -1465,7 +1467,7 @@ sp({ id:'bastionex', facs:['forge', 'lattice'], name:'Bastionex', fac:'forge', t
 sp({ id:'umbrathar', name:'Umbrathar', fac:'void', tier:4, plan:'quad', seed:58,
   pal:['#B39BFF','#05030F','#FFFFFF'],
   desc:'a panther-god of eclipse, pure absence shaped like a beast, a corona of violet light around a body that swallows it, constellations for markings, claws that leave nothing behind',
-  stats:{might:[60,72], logic:[48,60], nerve:[52,64], speed:[56,68]},
+  stats:{might:[58,70], logic:[48,60], nerve:[52,64], speed:[52,64]},
   cards:[ atk('a_eclipse','Eclipse',28,'void',12,'might',12,'pierce','The light goes out first.'),
           atk('a_corona_claw','Corona Claw',24,'void',12,'speed',10,null,'Seen only at the edges.'),
           atk('a_swallow','Swallow Light',20,'void',10,'nerve',10,'drain','The light goes in and stays.') ],
@@ -1663,10 +1665,10 @@ Object.values(SPECIES).forEach(s=>s.evolves.forEach((ev,bi)=>{
 const FX_TEXT = {
   pierce:'Pierce — ignores Shield.',
   shield:'Shield (Order) — the next strike against you deals 35% less; a second Shield makes it 50%.',
-  overload:'Overload (Chaos) — +30% damage while you are under half Endurance.',
+  overload:'Overload (Chaos) — +45% damage while you are under two-thirds Endurance.',
   drain:'Drain (Growth) — restores Endurance to the striker for half the damage.',
   burn:'Burn (Industry) — the target loses 5% of its max Endurance before each of its next two strikes.',
-  stagger:'Stagger (Secrecy) — the target\'s next strike deals 25% less.',
+  stagger:'Stagger (Secrecy) — the target\'s next strike deals 20% less.',
   drift:'Drift (Null) — raw data: nothing filters it. Ignores Shield, evasion, gear and Area reductions and Sandbox.',
 };
 
@@ -1721,7 +1723,7 @@ const AREA_FOR_FAC = { lattice:'a_lattice_grid', glitch:'a_static_storm', bloom:
 const AREA_COLOR = a => a.fac==='multi' ? '#E6EEF8' : FACTIONS[a.fac].color;
 
 // ------------------------------------------------------------
-// MOVEMENT — each System moves its own way on the 5×4 board. Attacks are always to an adjacent cell (8 directions).
+// MOVEMENT — each System moves its own way on the board. Attacks are always to an adjacent cell (8 directions).
 // ------------------------------------------------------------
 const MOVE_PATTERN = {
   lattice:{ id:'grid',   name:'Grid step',   text:'Up to 3 cells in a straight orthogonal line. Cannot pass through anything.' },
@@ -4811,7 +4813,8 @@ function refreshUnit(u){
   const g = gearOf(u);
   const as=u.areaStat||null;
   STAT_KEYS.forEach(k=>{ u.stats[k] = effStat(u.cre,k,u.sector) + (g&&g.stat&&g.stat[k]||0) + (as&&as[k]||0); });
-  const was = u.maxEnergy||0; u.maxEnergy = maxEndurance(u.cre, u.stats.nerve) + (g&&g.end||0);   // Endurance (life) — field kept as .energy for the bars
+  const gEnd = u.gear && MODS[u.gear] ? (MODS[u.gear].end||0) : 0;   // a Purge switches the gear's stats off, never its Endurance — otherwise the target came back healed when the duel ended
+  const was = u.maxEnergy||0; u.maxEnergy = maxEndurance(u.cre, u.stats.nerve) + gEnd;   // Endurance (life) — field kept as .energy for the bars
   if (was && u.energy!==undefined) u.energy = Math.max(1, Math.min(u.maxEnergy, u.energy + (u.maxEnergy-was)));
   const wasEn = u.maxEn||0; u.maxEn = maxEnergyPool(u.cre, u.stats.logic) + (g&&g.en||0);           // Energy (card pool)
   if (wasEn && u.en!==undefined) u.en = Math.max(0, Math.min(u.maxEn, u.en + (u.maxEn-wasEn)));
@@ -4838,7 +4841,7 @@ function drawTo(ds, n){
 const ACTIVE_MAX = 4, BENCH_MAX = 2;   // v0.37: four on the line, two in reserve
 const EVASION_DIV = 8, EVASION_CAP = 6;            // strikes against a faster creature lose ⌊(Speed gap) ÷ 8⌋, at most 6
 // System keywords — one each, nobody else's: Order SHIELD, Chaos OVERLOAD, Growth DRAIN, Industry BURN, Secrecy STAGGER, Null DRIFT. PIERCE is the one neutral effect.
-const FX = { shield:0.35, shield2:0.5, stagger:0.25, overload:0.30, burn:0.05, burnTicks:2 };
+const FX = { shield:0.35, shield2:0.5, stagger:0.20, overload:0.45, overloadAt:0.65, burn:0.05, burnTicks:2 };   // v0.41: Overload +45% under two-thirds, Stagger 20% (round-robin had Chaos at 33%, Secrecy at 63%)
 class Battle {
   constructor(playerCreatures, playerDeckIds, playerCodeIds, enemyCreatures, enemyDeckIds, enemyCodeIds, opts={}){
     this.sector = opts.sector || SECTORS[0];   // no Area on either side: neutral ground, nothing triggers (Areas are the only location effect)
@@ -4948,7 +4951,10 @@ class Battle {
   waveReady(side){ return !this.alive(side).length && this.reserves(side).length>0; }
   deployWave(side){
     const res=this.reserves(side); if(!res.length) return [];
-    const xs=spreadCols(res.length); res.forEach((u,i)=>{ u.benched=false; u.x=xs[i]; u.y=side==='p'?BOARD_H-1:0; u.subbed=true; });
+    // the home row can hold an enemy that walked all the way in: take free cells on the home row first, then the row in front of it
+    const y0=side==='p'?BOARD_H-1:0, y1=side==='p'?BOARD_H-2:1; const free=[]; [y0,y1].forEach(y=>spreadCols(BOARD_W).forEach(x=>{ if(!this.unitAt(x,y)) free.push({x,y}); }));
+    const mid=(BOARD_W-1)/2; free.sort((a,b)=>(a.y===y0?0:10)+Math.abs(a.x-mid)-((b.y===y0?0:10)+Math.abs(b.x-mid)));
+    res.forEach((u,i)=>{ const c=free[i]||{x:i%BOARD_W,y:y0}; u.benched=false; u.x=c.x; u.y=c.y; u.subbed=true; });
     return res;
   }
   checkOver(){
@@ -4978,7 +4984,7 @@ class Battle {
     if (sm && sm.dmg){ d+=sm.dmg; parts.push(`+${sm.dmg} gear`); }
     if (this.sector.dmgAll){ d+=this.sector.dmgAll; parts.push(`${this.sector.dmgAll>0?'+':''}${this.sector.dmgAll} sector`); }
     const sar=this.areaFor(striker); if (sar && sar.a.dmg){ const v=Math.ceil(sar.a.dmg*sar.m); d+=v; parts.push(`+${v} ${sar.a.name}`); }
-    if (card.fx==='overload' && striker.energy/striker.maxEnergy<0.5){ const v=Math.ceil(d*FX.overload); d+=v; parts.push(`+${v} overload`); }
+    if (card.fx==='overload' && striker.energy/striker.maxEnergy<FX.overloadAt){ const v=Math.ceil(d*FX.overload); d+=v; parts.push(`+${v} overload`); }
     if (striker.boost){ const v=Math.ceil(d*striker.boost); d+=v; parts.push(`+${v} code`); }
     const raw = card.fx==='drift';   // Drift: raw data — nothing on the target's side filters it
     if (striker.stagger){ const v=Math.ceil(d*striker.stagger); d-=v; parts.push(`−${v} staggered`); }
@@ -5255,7 +5261,7 @@ const SAVE_KEY = 'codex-creatures-v1';
 let G = null;
 function freshState(handle){
   return { handle, bits:60, zone:0, unlocked:{}, creatures:[], squad:[], inv:{mods:{}, codes:{c_patch:1}, attacks:Object.assign({},STARTER_KIT), areas:{}}, deck:{attacks:[], gear:[], codes:['c_patch'], areas:[]},
-           kit:1, rig:{}, beaten:{}, hailed:{}, seen:{}, stats:{battles:0,wins:0,scans:0}, created:Date.now() };
+           kit:1, deckV2:1, rig:{}, beaten:{}, hailed:{}, seen:{}, lastLayer:{}, stats:{battles:0,wins:0,scans:0}, created:Date.now() };
 }
 function normalizeState(g){
   if (!g || typeof g!=='object') return null;
@@ -5269,7 +5275,7 @@ function normalizeState(g){
   if (!g.deck){ g.deck={attacks:[], gear:[], codes:(g.codeDeck||[]).slice()}; delete g.codeDeck; }
   g.deck.attacks=g.deck.attacks||[]; g.deck.gear=g.deck.gear||[]; g.deck.codes=g.deck.codes||[]; g.deck.areas=g.deck.areas||[];
   g.stats = Object.assign({battles:0,wins:0,scans:0,pristine:0,deep:0,evos:0,decompiled:0,streak:0,bestStreak:0}, g.stats||{}); g.ach=g.ach||{}; g.seen=g.seen||{}; g.beaten=g.beaten||{}; g.zoneWins=g.zoneWins||{}; g.hailed=g.hailed||{};
-  g.dscans=g.dscans||{}; if (g.dscan){ const dz=ZONES[g.dscan.zone]; if(dz) g.dscans[dz.id]=g.dscan; delete g.dscan; }   /* v0.36: one scan per zone */ g.rig=g.rig||{}; delete g.crawlNext;
+  g.lastLayer=g.lastLayer||{}; g.dscans=g.dscans||{}; if (g.dscan){ const dz=ZONES[g.dscan.zone]; if(dz) g.dscans[dz.id]=g.dscan; delete g.dscan; }   /* v0.36: one scan per zone */ g.rig=g.rig||{}; delete g.crawlNext;
   if (g.crawl && (!g.crawl.tiles || g.crawl.over)) g.crawl=null;
   if(!g.deckV2){ g.deckV2=1; g._rebuildDeck=true; }
   if (!g.areaKit && g.creatures.length){ g.creatures.slice(0,1).forEach(c=>{ const a=AREA_FOR_FAC[SPECIES[c.sp].fac]; if(a){ g.inv.areas[a]=(g.inv.areas[a]||0)+1; g.deck.areas.push(a); } }); g.areaKit=1; }
@@ -5300,9 +5306,9 @@ function validDeck(sq){
   return { attacks:attacks.slice(0,DECK_MAX), gear:gear2, codes, areas:areas2, dropped };
 }
 function autoBuildDeck(){
-  // species cards for the active three first, generics by power after, gear and areas into what room is left of the shared limit
+  // species cards for the active line first, generics by power after, gear and areas into what room is left of the shared limit
   const ids=[]; const sq=squadCreatures();
-  sq.slice(0,ACTIVE_MAX).forEach(c=>SPECIES[c.sp].cards.forEach(a=>{ if(ids.filter(x=>x===a.id).length<sq.filter(o=>o.sp===c.sp).length) ids.push(a.id); }));
+  sq.slice(0,ACTIVE_MAX).forEach(c=>SPECIES[c.sp].cards.forEach(a=>{ if(ids.filter(x=>x===a.id).length<Math.min(COPY_MAX, sq.filter(o=>o.sp===c.sp).length)) ids.push(a.id); }));
   const facs=new Set(sq.slice(0,ACTIVE_MAX).flatMap(c=>facsOf(SPECIES[c.sp])));
   const value=a=>(a.base||0) + (a.fac&&facs.has(a.fac)?(a.facBonus||0):0) + (a.check?(a.checkBonus||0)/2:0) + (a.fx?2:0) - (a.cost||0)*1.5;
   const inv=inventoryAttacks(); const room=DECK_TOTAL - Math.min(AREAS_MAX, Object.values(G.inv.areas).reduce((a,b)=>a+b,0)) - Math.min(GEAR_MAX, Object.values(G.inv.mods).reduce((a,b)=>a+b,0));
@@ -5384,10 +5390,14 @@ function enterHub(){
 }
 function renderHubTop(){
   $('#hub-handle').textContent = G.handle; $('#hub-bits').textContent = `${G.bits} ⬡`; $('#hub-zone').textContent = ZONES[G.zone].name;
+  const readyDungeon = !(G.crawl&&!G.crawl.over) && Object.keys(G.dscans||{}).some(id=>{ const d=G.dscans[id]; return d && Date.now()>=d.end; });
+  const readyEvo = G.creatures.some(c=>canEvolve(c).some(e=>e.ok));
+  $$('#tabs button').forEach(b=>b.classList.toggle('badge', (b.dataset.tab==='world'&&readyDungeon)||(b.dataset.tab==='squad'&&readyEvo)));
 }
 $('#tabs').addEventListener('click', e=>{ const b=e.target.closest('button'); if(!b) return; tab=b.dataset.tab; $$('#tabs button').forEach(x=>x.classList.toggle('on',x===b)); renderTab(); });
 // keep=true re-renders in place and holds the scroll position (deck steppers, squad toggles) instead of snapping to the top
 function renderTab(keep){
+  if (typeof checkAchievements==='function') checkAchievements();
   renderHubTop();
   const body = $('#hub-body'); const st=body.scrollTop; body.innerHTML='';
   try{ ({home:renderHome, squad:renderSquad, world:renderWorld, deck:renderDeck, codex:renderCodex})[tab](body); }
@@ -5408,10 +5418,11 @@ function renderSquad(body){
   const sq = squadCreatures(); const box = G.creatures.filter(c=>!G.squad.includes(c.uid));
   const act = sq.slice(0,ACTIVE_MAX), bench = sq.slice(ACTIVE_MAX);
   body.append(el('h3',{style:'margin-bottom:8px'},`Active · ${act.length}/${ACTIVE_MAX}`));
-  body.append(el('div',{class:'list'}, act.map(c=>creRow(c))));
+  const swapBtn=(c,toBench)=>el('button',{class:'btn small swap',title:toBench?'Send to bench':'Make active',onclick:(e)=>{ e.stopPropagation(); const i=G.squad.indexOf(c.uid); if(i<0) return; G.squad.splice(i,1); if(toBench) G.squad.push(c.uid); else G.squad.splice(ACTIVE_MAX-1,0,c.uid); save(); renderTab(true); }}, toBench?'▼':'▲');
+  body.append(el('div',{class:'list'}, act.map(c=>el('div',{class:'row swaprow'}, creRow(c), sq.length>1?swapBtn(c,true):null))));
   if (act.length===0) body.append(el('p',{class:'muted'},G.creatures.length?'Nothing active. Open a creature below and add it.':'Nothing linked yet. Scan a signal in the World tab.'));
   body.append(el('h3',{style:'margin:18px 0 8px'},`Bench · ${bench.length}/${BENCH_MAX}`));
-  body.append(el('div',{class:'list'}, bench.map(c=>creRow(c))));
+  body.append(el('div',{class:'list'}, bench.map(c=>el('div',{class:'row swaprow'}, creRow(c), swapBtn(c,false)))));
   body.append(el('h3',{style:'margin:18px 0 8px'},`Stored · ${box.length}`));
   if (!box.length) body.append(el('p',{class:'muted',style:'font-size:12px'},'Empty.'));
   body.append(el('div',{class:'list'}, box.map(c=>creRow(c))));
@@ -5494,7 +5505,7 @@ function doEvolve(c, toId){
   const from = SPECIES[c.sp], to = SPECIES[toId];
   const fromId=c.sp;
   const oldCard = bigCard(c,{cls:'card-lg',box:230});          // the card as it is now, before anything changes
-  evolveCreature(c, toId); G.seen[toId]=true; deckOnEvolve(fromId,toId); save();
+  evolveCreature(c, toId); G.seen[toId]=true; deckOnEvolve(fromId,toId); pruneDeck(); save();
   closeModal();
   const body = el('div',{class:'result'});
   const wrap = el('div',{class:'evo-wrap'}, oldCard, el('div',{class:'white'}));
@@ -5547,13 +5558,13 @@ function renderWorld(body){
   const cur = ZONES[G.zone]; const R = regionOf(cur);
   // regions: one pill each, the current one lit
   const rl = el('div',{class:'zone-list'});
-  REGIONS.forEach(r=>{ const col=r.fac?FACTIONS[r.fac].color:'#3FE3D2'; rl.append(el('button',{class:'zone-pill'+(r.id===R.id?' on':''),style:r.id===R.id?`border-color:${col};color:${col}`:'',onclick:()=>{ const top=unlockedLayer(r.id); G.zone=zoneAt(r.id, Math.min(top, LAYER_BANDS.length-1)+1).idx; save(); renderTab(); }}, r.fac?facIcon(r.fac,11):'', ' '+r.name)); });
+  REGIONS.forEach(r=>{ const col=r.fac?FACTIONS[r.fac].color:'#3FE3D2'; rl.append(el('button',{class:'zone-pill'+(r.id===R.id?' on':''),style:r.id===R.id?`border-color:${col};color:${col}`:'',onclick:()=>{ const top=unlockedLayer(r.id); const want=Math.min(top, (G.lastLayer&&G.lastLayer[r.id]!==undefined)?G.lastLayer[r.id]:top, LAYER_BANDS.length-1); G.zone=zoneAt(r.id, want+1).idx; save(); renderTab(true); }}, r.fac?facIcon(r.fac,11):'', ' '+r.name)); });
   body.append(rl);
   // the ladder: every layer of this region, locked ones included, so the climb is always visible
   const lad = el('div',{class:'ladder'});
   for (let li=LAYER_BANDS.length-1; li>=0; li--){ const z=zoneAt(R.id, li+1); const open = li<=unlockedLayer(R.id); const isCur = z.idx===G.zone; const b=z.band;
     const stages = b.stages.map(t=>STAGES[t-1].name).join(' / '); const bl=bandLvl(z);
-    lad.append(el('button',{class:'lay'+(isCur?' on':'')+(open?'':' locked'),onclick:()=>{ if(!open){ toast(`Beat the ${LAYER_NAMES[li-1]} Warden of ${R.name} to open this layer.`); return; } G.zone=z.idx; save(); renderTab(); }},
+    lad.append(el('button',{class:'lay'+(isCur?' on':'')+(open?'':' locked'),onclick:()=>{ if(!open){ toast(`Beat the ${LAYER_NAMES[li-1]} Warden of ${R.name} to open this layer.`); return; } G.zone=z.idx; G.lastLayer=G.lastLayer||{}; G.lastLayer[R.id]=li; save(); renderTab(true); }},
       el('span',{class:'ln'},`${li+1}`), el('div',{class:'grow'}, el('div',{class:'nm'},z.layerName), el('div',{class:'sub'},`Lv ${bl[0]===bl[1]?bl[0]:bl[0]+'–'+bl[1]} · ${stages}`)), el('span',{class:'mono st'}, open ? (isCur?'HERE':'OPEN') : '🔒'))); }
   body.append(lad);
   const z = ZONES[G.zone];
@@ -5564,7 +5575,7 @@ function renderWorld(body){
   const d=dscanOf(z); const scanZone = z;
   const ctl = el('div',{class:'row',style:'gap:8px;margin:12px 0;align-items:stretch'});
   if (G.crawl && !G.crawl.over) ctl.append(el('button',{class:'btn primary grow',onclick:()=>resumeCrawl()}, G.crawl.zone===z.idx?`⌖ Re-enter Data Dungeon · ${G.crawl.moves} moves left`:`⌖ Data Dungeon open in ${ZONES[G.crawl.zone].name}`));
-  else if (d && !dscanDone(z)){ const b=el('button',{class:'btn grow scanning',disabled:'1'},`⌖ Scanning ${scanZone.name} · ${dscanLeft(z)}`); ctl.append(b);
+  else if (d && !dscanDone(z)){ const b=el('button',{class:'btn grow scanning',disabled:'1',title:'Other zones can scan at the same time'},`⌖ Scanning ${scanZone.name} · ${dscanLeft(z)}`); ctl.append(b);
     clearInterval(window._cdT); window._cdT=setInterval(()=>{ if(!document.body.contains(b)){ clearInterval(window._cdT); return; } if(dscanDone(z)){ clearInterval(window._cdT); try{ SFX.lockHit(); }catch(e){} if(tab==='world') renderTab(true); } else b.textContent=`⌖ Scanning ${scanZone.name} · ${dscanLeft(z)}`; },500); }
   else if (d) ctl.append(el('button',{class:'btn primary grow',onclick:()=>enterDungeon(z)},`⌖ Enter Data Dungeon · ${scanZone.name}`));
   else ctl.append(el('button',{class:'btn primary grow',onclick:()=>startDscan(z)},`⌖ Scan for a Data Dungeon · ${mmss(dscanTime(z))}`));
@@ -5575,15 +5586,15 @@ function renderWorld(body){
   body.append(el('div',{class:'row',style:'justify-content:space-between;align-items:baseline;margin-bottom:8px'}, el('h3',{style:'margin:0'},'Linkers'), el('span',{class:'mono muted rot',style:'font-size:10px;letter-spacing:.14em'},`ROTATION IN ${rotationText()}`)));
   const list = el('div',{class:'list'});
   const row=(t,locked)=>{ const beat=!!(G.zoneWins&&G.zoneWins[z.id]&&G.zoneWins[z.id][t.id]) || (t.warden&&G.beaten[t.id]); const sq=t.warden?wardenSquad(z):t.squad; const lv=Math.round(sq.reduce((s,x)=>s+x[1],0)/sq.length);
-    return el('div',{class:'tamer'+(t.warden?' warden':'')}, el('div',{class:'av'+(t.fac?' fac-'+t.fac:'')},t.warden?'W':t.name[0]), el('div',{class:'grow'}, el('div',{class:'nm'},t.name), el('div',{class:'sub'},`${sq.length} creatures · ${t.warden?'Lv '+sq[0][1]:'avg Lv '+lv}${t.fac?' · '+FACTIONS[t.fac].name:''}${beat?' · beaten':''}`)),
+    return el('div',{class:'tamer'+(t.warden?' warden':'')}, el('div',{class:'av'+(t.fac?' fac-'+t.fac:'')},t.warden?'W':t.name[0]), el('div',{class:'grow'}, el('div',{class:'nm'},t.name), el('div',{class:'sub'},`${sq.length} creatures · ${t.warden?(()=>{ const lvs=sq.map(x=>x[1]); const lo=Math.min(...lvs), hi=Math.max(...lvs); return lo===hi?'Lv '+hi:'Lv '+lo+'–'+hi; })():'avg Lv '+lv}${t.fac?' · '+FACTIONS[t.fac].name:''}${beat?' · beaten':''}`)),
       el('button',{class:'btn small'+(locked||!canBattle()?'':' primary'),disabled:locked||!canBattle()?'1':null,onclick:()=>challenge(z,t)}, locked?'Locked':canBattle()?'Challenge':'No creature')); };
   roster.forEach(t=>list.append(row(t,false)));
   if (warden) list.append(row(warden, wins<WARDEN_WINS));
   body.append(list);
-  clearInterval(window._rotT); window._rotT=setInterval(()=>{ const r=body.querySelector('.rot'); if(!r){ clearInterval(window._rotT); return; } if(Date.now()-G.roster.at>=ROTATION_MS){ clearInterval(window._rotT); if(tab==='world') renderTab(); } else r.textContent=`ROTATION IN ${rotationText()}`; },1000);
+  clearInterval(window._rotT); window._rotT=setInterval(()=>{ const r=body.querySelector('.rot'); if(!r){ clearInterval(window._rotT); return; } const cur=G.roster&&G.roster.zones&&G.roster.zones[z.id]; if(!cur || Date.now()-cur.at>=ROTATION_MS){ clearInterval(window._rotT); if(tab==='world') renderTab(true); } else r.textContent=`ROTATION IN ${rotationText()}`; },1000);
   if (!canBattle()) body.append(el('p',{class:'muted',style:'font-size:12px;margin-top:8px'},'You need a creature in an active slot before you can challenge anyone. Scan for signals first.'));
   else if (wins<WARDEN_WINS) body.append(el('p',{class:'muted',style:'font-size:12px;margin-top:8px'},`Beat ${WARDEN_WINS-wins} more Linker${WARDEN_WINS-wins===1?'':'s'} here to draw out the Warden. New Linkers pass through every five minutes.`));
-  G.hailed=G.hailed||{}; if (warden && !G.hailed[z.id]){ G.hailed[z.id]=true; save(); setTimeout(()=>wardenHail(z, warden), 350); }
+  G.hailed=G.hailed||{}; if (warden && !G.hailed[z.id]) setTimeout(()=>wardenHail(z, warden), 350);
   body.append(el('h3',{style:'margin:16px 0 8px'},'Known signals'));
   body.append(el('div',{class:'row wrap'}, z.wild.map(([id])=>{ const s=SPECIES[id]; return el('span',{class:`chip ${G.seen[id]?'fac fac-'+s.fac:''}`}, G.seen[id]?s.name:'???'); })));
 }
@@ -5600,6 +5611,8 @@ function canBattle(){ return squadCreatures().slice(0,ACTIVE_MAX).length>0; }
 function regionColor(z){ return z.fac ? FACTIONS[z.fac].color : '#3FE3D2'; }
 // first look at a layer: its Warden hails you — a banner in the region colour, once per layer
 function wardenHail(z, w){
+  if (!$('#s-hub').classList.contains('active') || tab!=='world' || ZONES[G.zone]!==z) return;   // only where you are standing, only on the hub
+  G.hailed[z.id]=true; save();
   $$('.hail').forEach(h=>h.remove());
   const col=regionColor(z);
   const h=el('div',{class:'hail',style:`--wc:${col}`}, el('div',{class:'eyebrow'},`Warden · ${z.name}`), el('div',{class:'nm'},w.name), el('div',{class:'ln'},`“${w.line}”`));
@@ -5658,7 +5671,7 @@ function roamingTamer(z,t){
   const body=$('#enc-body'); body.innerHTML='';
   body.append(el('div',{class:'eyebrow'},`Linker sighted · ${z.name}`), el('div',{class:'holo-stage',style:'align-items:center;font-family:var(--display);font-size:54px;color:var(--holo)'},t.name[0]),
     el('h1',{style:'font-size:28px'},t.name), el('div',{class:'row',style:'gap:6px;align-items:center;justify-content:center'}, el('span',{class:'chip style-'+botStyle(t)},BOT_STYLES[botStyle(t)].name), el('span',{class:'muted',style:'font-size:12px'},BOT_STYLES[botStyle(t)].text)), el('p',{style:'font-size:16px'},`“${t.line}”`), el('div',{class:'row wrap',style:'justify-content:center'}, enemies.map(c=>el('span',{class:`chip fac fac-${SPECIES[c.sp].fac}`},`${SPECIES[c.sp].name} Lv${c.lvl}`))),
-    el('div',{class:'col',style:'width:100%;max-width:280px'}, el('button',{class:'btn primary block',onclick:()=>startBattle(enemies,{zone:z,tamer:t})},'Accept the duel'), el('button',{class:'btn ghost block',onclick:()=>leaveEncounter()},'Walk away')));
+    el('div',{class:'col',style:'width:100%;max-width:280px'}, el('button',{class:'btn primary block',onclick:()=>startBattle(enemies,{zone:z,tamer:t,fromCrawl:true})},'Accept the duel'), el('button',{class:'btn ghost block',onclick:()=>leaveEncounter()},'Walk away')));
   show('s-encounter');
 }
 $('#enc-back').onclick = ()=>leaveEncounter();
@@ -5844,7 +5857,7 @@ function renderDeck(body){
   const addAttack=(id,d)=>{ if(d>0){ if(full()) return; D.attacks.push(id); } else { const i=D.attacks.indexOf(id); if(i>=0) D.attacks.splice(i,1); } save(); renderTab(true); };
   const hd = el('div',{class:'row',style:'justify-content:space-between;align-items:flex-end;margin-bottom:6px'},
     el('div',{}, el('h3',{},`Deck · ${total}/${DECK_TOTAL}`), el('div',{class:'mono muted',style:'font-size:10px;letter-spacing:.12em'},`${n} ATTACKS · ${D.gear.length} GEAR · ${D.areas.length} AREAS${n<DECK_MIN?` · MIN ${DECK_MIN} ATTACKS, SHORT DECKS ARE PADDED WITH BYTE STRIKE`:''}`)),
-    el('button',{class:'btn small',onclick:()=>{ autoBuildDeck(); toast('Deck auto-built from your squad.'); renderTab(true); }},'Auto-build'));
+    el('div',{class:'row',style:'gap:6px'}, el('button',{class:'btn small',onclick:async()=>{ if(total && !(await askConfirm('Auto-build the deck?','Your current deck is replaced with one built from your squad.','Auto-build'))) return; autoBuildDeck(); toast('Deck auto-built from your squad.'); renderTab(true); }},'Auto-build'), el('button',{class:'btn small',disabled:total?null:'1',onclick:async()=>{ if(!(await askConfirm('Clear the deck?','Every attack, gear and Area card comes out. Codes stay.','Clear'))) return; D.attacks=[]; D.gear=[]; D.areas=[]; save(); renderTab(true); }},'Clear')));
   body.append(hd);
   // species cards: real cards now. Each creature you own lends one copy of each of its species' cards; only that species can play them.
   const sp=el('div',{class:'panel'}, el('h3',{style:'margin-bottom:8px'},'Species cards'), el('p',{class:'muted',style:'font-size:12px;margin-top:0'},`One copy per creature you own, max ${COPY_MAX}. Dead in any other species' hand.`));
@@ -5986,7 +5999,7 @@ function cardFrame(kind, obj, opts={}){
   if (kind==='attack'){ const f=obj.fac?FACTIONS[obj.fac]:null; type = obj.sp ? `SPECIES · ${SPECIES[obj.sp].name.toUpperCase()}` : `ATTACK${f?' · '+f.name.toUpperCase():''}`;
     if (f) tx.push(el('span',{class:'fx fac'},facIcon(obj.fac,10),` +${obj.facBonus} dmg when a${/^[AEIOU]/.test(f.name)?'n':''} ${f.name} creature plays it`));
     if (obj.check) tx.push(el('span',{},`+${obj.checkBonus} dmg if your ${STAT_LABEL[obj.check]} is higher`));
-    if (obj.fx) tx.push(el('span',{class:'fx'},({shield:'SHIELD −35%',stagger:'STAGGER −25%',drain:'DRAIN ½',pierce:'PIERCE',overload:'OVERLOAD +30% <½',burn:'BURN 5%×2',drift:'DRIFT · RAW'})[obj.fx]||obj.fx.toUpperCase()));
+    if (obj.fx) tx.push(el('span',{class:'fx'},({shield:'SHIELD −35%',stagger:'STAGGER −20%',drain:'DRAIN ½',pierce:'PIERCE',overload:'OVERLOAD +45% <⅔',burn:'BURN 5%×2',drift:'DRIFT · RAW'})[obj.fx]||obj.fx.toUpperCase()));
     if (obj.flavor||obj.text) tx.push(el('i',{},obj.flavor||obj.text)); }
   else if (kind==='gear'){ type='GEAR'; tx.push(el('span',{},obj.text)); }
   else if (kind==='code'){ type='CODE'; tx.push(el('span',{},obj.text)); }
@@ -6088,8 +6101,9 @@ function spinAreas(mine, theirs){
     const turns=4+Math.floor(Math.random()*2); const target=turns*360 + (360-k*360/N)%360;   // ring angle that brings slot k to the front
     let started=false;
     btn.onclick=()=>{ if(started) return; started=true; btn.disabled=true; btn.textContent='Spinning…';
-      const t0=performance.now(), dur=3600+Math.random()*600; let lastTick=-1;
-      const step=now=>{ const t=Math.min(1,(now-t0)/dur); const e=1-Math.pow(1-t,3); const ang=e*target; ring.style.transform=`rotateY(${ang}deg)`;
+      const t0=performance.now(), dur=3600+Math.random()*600; let lastTick=-1, skip=false;
+      wheel.onclick=()=>{ skip=true; };   // a tap on the wheel jumps to the result
+      const step=now=>{ const t=skip?1:Math.min(1,(now-t0)/dur); const e=1-Math.pow(1-t,3); const ang=e*target; ring.style.transform=`rotateY(${ang}deg)`;
         const slotAtFront=Math.round(((360-(ang%360))%360)/(360/N))%N; if(slotAtFront!==lastTick){ lastTick=slotAtFront; try{ SFX.tick(); }catch(_){ } }
         if(t<1) requestAnimationFrame(step); else finish(); };
       requestAnimationFrame(step); };
@@ -6147,7 +6161,9 @@ function onGear(i){
   renderBoard(); setHint(gearSel!==null?`${MODS[B.gear.p[gearSel]].name} — tap one of your creatures to fit it. That is your whole turn.`:HINT_IDLE);
 }
 async function fitGearAction(u, i){
-  const id=B.gear.p[i]; B.playGear('p', u, id); gearSel=null; sel=null;
+  const id=B.gear.p[i];
+  if (u.gear && !(await askConfirm(`Replace ${MODS[u.gear].name}?`, `${u.cre.nick} already wears ${MODS[u.gear].name}. Fitting ${MODS[id].name} throws the old one away for this battle.`, 'Replace'))){ gearSel=null; renderBoard(); setHint(HINT_IDLE); return; }
+  B.playGear('p', u, id); gearSel=null; sel=null;
   renderBoard(); setHint(`${u.cre.nick} fitted with ${MODS[id].name}.`); toast(`⚙︎ ${MODS[id].name} → ${u.cre.nick}`);
   await wait(500); await afterPlayerAction();
 }
@@ -6156,9 +6172,9 @@ async function onCell(x,y){
   const u = B.unitAt(x,y);
   if (u && u.side==='p'){
     if (gearSel!==null) return fitGearAction(u, gearSel);
-    sel = (sel===u)?null:u; renderBoard(); setHint(sel?`${sel.cre.nick} · ${movePatternOf(sel.sp).name}: ${movePatternOf(sel.sp).text} Tap a cell to move, or a marked enemy to engage.`:HINT_IDLE); return;
+    sel = (sel===u)?null:u; renderBoard(); if (sel && !B.moveTargets(sel).length && !B.engageOptions(sel).length) setHint(`${sel.cre.nick} is boxed in — nowhere to step and nothing in reach. Pick another creature, fit gear, or Pass.`); else setHint(sel?`${sel.cre.nick} · ${movePatternOf(sel.sp).name}: ${movePatternOf(sel.sp).text} Tap a cell to move, or a marked enemy to engage.`:HINT_IDLE); return;
   }
-  if (!sel) return;
+  if (!sel){ if (u) setHint(`${u.cre.nick} · ${SPECIES[u.sp].name} · Lv ${u.cre.lvl} · ${u.energy}/${u.maxEnergy} END. Tap one of your creatures first.`); else setHint('Tap one of your creatures first.'); return; }
   if (u && u.side==='e'){
     const o = B.engageOptions(sel).find(o=>o.target===u);
     if (!o){ setHint('Out of reach this turn — move closer first.'); return; }
@@ -6177,7 +6193,7 @@ async function afterPlayerAction(){
   await enemyTurn();
 }
 $('#b-end').addEventListener('click', async ()=>{ if(busy||B.turn!=='p'||B.over) return; sel=null; gearSel=null; renderBoard(); setHint('You hold position.'); await enemyTurn(); });
-$('#b-flee').addEventListener('click', async ()=>{ if(busy||B.over) return; if(await askConfirm('Retreat?','Pull your squad out. Nothing changes hands.','Retreat')){ B.over='flee'; endBattle(); } });
+$('#b-flee').addEventListener('click', async ()=>{ if(busy||B.over) return; if(await askConfirm('Retreat?',B.area ? 'Pull your squad out. The Area card you brought is already spent.' : 'Pull your squad out. Nothing changes hands.','Retreat')){ B.over='flee'; endBattle(); } });
 
 async function enemyTurn(){
   B.endTurn(); busy=true; renderBoard(); setHint('Enemy is thinking…');
@@ -6281,6 +6297,7 @@ async function runDuel(attacker, defender, attackerSide){
     await wait(r.killed?800:1000);
     side = side==='p'?'e':'p';
   }
+  if (DUEL.p.alive && DUEL.e.alive){ duelMsg('The duel stalls and both creatures fall back.'); break; }   // guard ran out with both standing: nobody is deleted
   const loser = DUEL.p.alive ? DUEL.e : DUEL.p, winner = loser===DUEL.p ? DUEL.e : DUEL.p;
   if (winner.side==='p'){ winner.cre.wins=(winner.cre.wins||0)+1; B.kills=B.kills||[]; B.kills.push({ killer:winner.cre.uid, xp:killXp(loser.cre, winner.cre.lvl) }); }   // a duel win is a duel win; the XP for the kill is banked here
   DUEL.striker=null; renderDuelSides();
@@ -6335,16 +6352,19 @@ function playerStrikeChoice(striker, target, free){
       if (!ds.hand.some(e=>resolveCard(e,striker).id==='g_jab')) addAttack(ALL_ATTACKS.g_jab, null, true);
       // codes ride in the same fan
       const codes = B.codes.p.map(id=>CODES[id]);
-      if (codes.length){ hand.append(el('span',{class:'lbl'},`CODES · ${striker.cycles}◈`));
-        codes.forEach(c=>{ const ok=c.cost<=striker.cycles; const card=codeCardEl(c,{cls:ok?'pick':'disabled'});
-          const run=()=>{ if(!ok){ toast(`Needs ${c.cost} Cycle${c.cost===1?'':'s'}.`); return; } const note=B.applyCode(striker,target,c,'p'); duelMsg(`<b>${c.name}</b> — ${note}`); if(!target.alive){ resolve({skip:true}); return; } render(); };
-          fanCard(card,{ play: ok?run:null, zoom:()=>zoomCard(card,{action:run, disabled:!ok, label:`Run · ${c.cost}◈`, note:ok?'Runs before your strike.':`Needs ${c.cost} Cycle${c.cost===1?'':'s'} — ${striker.cre.nick} has ${striker.cycles}.`}) });
+      const noCycles = striker.cycles===0 && cyclesOf(striker.cre, striker.sector)===0 && !(gearOf(striker)&&gearOf(striker).cycles);
+      if (codes.length && noCycles) hand.append(el('span',{class:'lbl'},`CODES · ${striker.sp.tier===1?'KERNELS HAVE NO CYCLES':'NO CYCLES'}`));
+      else if (codes.length){ hand.append(el('span',{class:'lbl'},`CODES · ${striker.cycles}◈`));
+        codes.forEach(c=>{ const pointless = (c.kind==='purge' && !target.gear) || (c.kind==='steal' && !target.cycles); const ok=c.cost<=striker.cycles && !pointless; const card=codeCardEl(c,{cls:ok?'pick':'disabled'});
+          const run=()=>{ if(!ok){ toast(pointless ? (c.kind==='purge' ? `${target.cre.nick} has no gear to purge.` : `${target.cre.nick} has no Cycles to steal.`) : `Needs ${c.cost} Cycle${c.cost===1?'':'s'}.`); return; } const note=B.applyCode(striker,target,c,'p'); duelMsg(`<b>${c.name}</b> — ${note}`); if(!target.alive){ resolve({skip:true}); return; } render(); };
+          fanCard(card,{ play: ok?run:null, zoom:()=>zoomCard(card,{action:run, disabled:!ok, label:`Run · ${c.cost}◈`, note:ok?'Runs before your strike.':pointless?(c.kind==='purge'?`${target.cre.nick} has no gear to purge.`:`${target.cre.nick} has no Cycles to steal.`):`Needs ${c.cost} Cycle${c.cost===1?'':'s'} — ${striker.cre.nick} has ${striker.cycles}.`}) });
           hand.append(card); }); }
       A.append(el('div',{class:'muted mono',style:'font-size:10px;letter-spacing:.12em;padding:0 12px'},'TAP TO READ · DRAG UP TO PLAY · ONE DISCARD A STRIKE'), hand);
       const row = el('div',{class:'codes'});
       const swaps = B.swapOptions(striker);
       if (swaps.length) row.append(el('button',{class:'ccode swap',onclick:()=>renderSwap()}, el('span',{class:'nm'},'⇄ Swap'), el('span',{class:'tx'},`${swaps.length} in range · uses your strike`)));
-      if (swaps.length) A.append(row);
+      else if (B.reserves('p').length) row.append(el('span',{class:'ccode swap muted',style:'opacity:.6'}, el('span',{class:'nm'},'⇄ Swap'), el('span',{class:'tx'},'nobody in range · reserves only deploy when your line falls')));
+      if (row.children.length) A.append(row);
     };
     const renderSwap = ()=>{
       const A=$('#duel-actions'); A.innerHTML='';
@@ -6395,6 +6415,7 @@ function endBattle(){
     body.append(el('div',{class:'eyebrow',style:wfall?`color:${col}`:''},wfall?'Warden defeated':won?'Victory':'Defeat'), el('h1',{class:wfall?'wfall'+(t.name.length>16?' long':''):'',style:wfall?`color:${col}`:won?'color:var(--holo)':'color:var(--danger)'},wfall?t.name:won?'Squad holds':'Squad deleted'));
     body.append(el('p',{style:'font-size:16px'}, won ? (t.warden?`“${WARDEN_YIELD[z.region]||'Passage granted, Linker.'}”`:`${t.name}: “Fine. You earned that one.”`) : `${t.name}: “Come back when your lead can take a hit.”`));
     body.append(el('div',{class:'reward'},`+${rw.bits} ⬡${xpLines.length?' · '+xpLines.join(' · ')+' XP':''}`));
+    { const fell=B.units.filter(u=>u.side==='p' && !u.alive && u.fought).map(u=>u.cre.nick); if (fell.length && !fled) body.append(el('p',{class:'mono muted',style:'font-size:11px'},`${fell.join(', ')} went down · no XP`)); }
     if (ups.length) body.append(el('p',{class:'mono',style:'color:var(--good);font-size:13px'},ups.join(' · ')));
     if (drop && drop.zone){ body.append(el('div',{class:'wunlock'}, el('div',{class:'eyebrow'},'Layer opened'), el('div',{class:'nm'},zoneAt(z.region, z.layer+1).name))); body.append(el('p',{class:'mono',style:'color:var(--amber)'},`Spoils: ${drop.spoils}`)); }
     else if (drop) body.append(el('p',{class:'mono',style:'color:var(--amber)'},`Spoils: ${drop}`));
@@ -6403,7 +6424,7 @@ function endBattle(){
   }
   $('#s-result').classList.toggle('warden', won && !!(t&&t.warden));
   save();
-  body.append(el('button',{class:'btn primary',onclick:()=>{ if(G.crawl&&!G.crawl.over){ if(won&&BCTX.tamer) G.crawl.log.push(`beat ${BCTX.tamer.name}`); return leaveEncounter(); } tab='squad'; $$('#tabs button').forEach(x=>x.classList.toggle('on',x.dataset.tab==='squad')); enterHub(); }},won?'Return':'Return to Linker'));
+  body.append(el('button',{class:'btn primary',onclick:()=>{ if(BCTX.fromCrawl&&G.crawl&&!G.crawl.over){ if(won&&BCTX.tamer) G.crawl.log.push(`beat ${BCTX.tamer.name}`); return leaveEncounter(); } tab='squad'; $$('#tabs button').forEach(x=>x.classList.toggle('on',x.dataset.tab==='squad')); enterHub(); }},won?'Return':'Return to Linker'));
   show('s-result');
 }
 
@@ -6443,7 +6464,7 @@ function enterDungeon(z){
   if (!dscanDone(z)){ toast(`Still scanning · ${dscanLeft(z)}`); return; }
   delete G.dscans[z.id]; G.crawl=genCrawl(z); save();
   try{ SFX.engage(); }catch(e){}
-  resumeCrawl(); setCrawlHint(`Data Dungeon open. ${G.crawl.max} moves — ${spareMoves()?'the walk to the Deep Signal plus one spare':'exactly the walk to the Deep Signal'}. Blockers are solid; hazards cost two.`);
+  resumeCrawl(); setCrawlHint(`Data Dungeon open. ${G.crawl.max} moves — ${spareMoves()?'the walk to the Deep Signal plus one spare':'exactly the walk to the Deep Signal'}. Blockers are solid; hazards cost two. ◈ is the walk left to the Deep Signal.`);
 }
 
 // ---- Deep Signal — the prize at the far end ----
@@ -6485,6 +6506,7 @@ function genCrawl(z){
     // must be reachable, must force a real detour, and must leave enough open lattice for the pickups to hide in
     if (dist!==Infinity && dist>=manhattan+2 && reachable>=22) break;
   }
+  if (dist===Infinity){ walls.fill(false); dS=crawlDist(walls,sx,sy); dD=crawlDist(walls,deep[0],deep[1]); dist=dS[idx(deep[0],deep[1])]; }   // never an unreachable prize: fall back to open lattice
   // hazards: a few visible tiles on the shortest lines that cost 2 moves to cross — go through and pay, or go round and pay the detour. The budget is the cheapest walk with them in place.
   const hazards=new Array(CRAWL_W*CRAWL_H).fill(false);
   { const onLine0=[]; for(let y=0;y<CRAWL_H;y++) for(let x=0;x<CRAWL_W;x++){ const i=idx(x,y); if(walls[i]||(x===deep[0]&&y===deep[1])||(Math.abs(x-sx)<=1&&Math.abs(y-sy)<=1)) continue; if(dS[i]+dD[i]===dist && dS[i]>=2 && dD[i]>=2) onLine0.push([x,y]); }
@@ -6512,8 +6534,9 @@ function resumeCrawl(){ const c=G.crawl; if(!c) return enterHub();
   if (c.pending){ const t=c.tiles[c.pending.y*c.w+c.pending.x]; if(t && !t.done){ const z=ZONES[c.zone]; show('s-crawl'); renderCrawl();
     if (t.k==='creature') return wildEncounter(z, t.sp, t.lvl);
     if (t.k==='deep') return t.kind==='vault' ? cacheEncounter(z, t.item, {extra:t.extra, deep:'vault'}) : wildEncounter(z, t.sp, t.lvl, {qFloor:t.qFloor, deep:t.kind});
-    if (t.k==='cache') return cacheEncounter(z, t.item); } c.pending=null; }
-  if(c.moves<=0 && !c.over) return endCrawl('Out of moves.'); show('s-crawl'); renderCrawl(); }
+    if (t.k==='cache') return cacheEncounter(z, t.item);
+    if (t.k==='linker') return roamingTamer(z, t.tamer); } c.pending=null; }
+  if(!c.over && (c.moves<=0 || !canStep(c))) return endCrawl('Out of moves.'); show('s-crawl'); renderCrawl(); }
 function setCrawlHint(t){ $('#cr-hint').textContent=t; }
 
 function crawlTileEl(t, x, y, c){
@@ -6535,15 +6558,15 @@ function crawlTileEl(t, x, y, c){
 }
 function renderCrawl(){
   const c=G.crawl; if(!c) return enterHub(); const z=ZONES[c.zone];
-  $('#cr-zone').textContent = z.name; $('#cr-moves').textContent = `${c.moves} / ${c.max}`; $('#cr-moves').classList.toggle('low', c.moves<=4);
+  $('#cr-zone').textContent = z.name; const dd=deepDist(c); $('#cr-moves').textContent = `${c.moves} / ${c.max}`+(dd!==null?` · ◈ ${dd}`:''); $('#cr-moves').classList.toggle('low', c.moves<=4 || (dd!==null && dd>c.moves));
   const grid=$('#cr-grid'); grid.innerHTML='';
   for(let y=0;y<c.h;y++) for(let x=0;x<c.w;x++) grid.append(crawlTileEl(c.tiles[y*c.w+x], x, y, c));
-  $('#cr-ping').disabled = c.moves<pingCost() || c.over ? '1' : null; $('#cr-ping').textContent = `Ping · −${pingCost()}`;
+  $('#cr-ping').disabled = c.moves<pingCost() || c.over ? '1' : null; $('#cr-ping').textContent = c.moves<pingCost() ? `Ping · needs ${pingCost()}` : `Ping · −${pingCost()}`;
   const bar=$('#cr-bar'); bar.style.width=`${c.moves/c.max*100}%`;
   const found=$('#cr-log'); found.textContent = c.log.length ? c.log.join(' · ') : 'Nothing gathered yet.';
 }
 async function crawlTap(x,y){
-  const c=G.crawl; if(!c||c.over) return;
+  const c=G.crawl; if(!c||c.over||c.pending) return;
   const d=Math.abs(x-c.px)+Math.abs(y-c.py); if(d!==1) return;
   const t=c.tiles[y*c.w+x];
   if (t.k==='wall'){ t.seen=true; setCrawlHint('Solid substrate. Go around.'); renderCrawl(); return; }
@@ -6553,20 +6576,24 @@ async function crawlTap(x,y){
   try{ SFX.tick(); }catch(e){}
   const z=ZONES[c.zone];
   save(); renderCrawl();
-  if (t.done){ if(c.moves<=0) return endCrawl('Out of moves.'); setCrawlHint(`${c.moves} moves left.`); return; }
+  if (t.done){ if(c.moves<=0) return endCrawl('Out of moves.'); if(!canStep(c)) return endCrawl('Out of moves.'); setCrawlHint(`${c.moves} moves left.`); return; }
   switch(t.k){
     // the tile is settled by the encounter itself (crawlTileDone), so closing the app mid-scan costs nothing
     case 'creature': c.pending={x,y}; save(); await wait(200); wildEncounter(z, t.sp, t.lvl); return;
     case 'deep': c.pending={x,y}; save(); await wait(200); if(t.kind==='vault') cacheEncounter(z, t.item, {extra:t.extra, deep:'vault'}); else wildEncounter(z, t.sp, t.lvl, {qFloor:t.qFloor, deep:t.kind}); return;
     case 'cache': c.pending={x,y}; save(); await wait(200); cacheEncounter(z, t.item); return;
-    case 'linker': { t.done=true; save(); const tm=t.tamer; if(!canBattle()){ setCrawlHint(`${tm.name} looks at your empty squad slots and waves you through.`); break; } await wait(200); roamingTamer(z, tm); return; }
+    case 'linker': { const tm=t.tamer; if(!canBattle()){ t.done=true; save(); setCrawlHint(`${tm.name} looks at your empty squad slots and waves you through.`); break; } c.pending={x,y}; save(); await wait(200); roamingTamer(z, tm); return; }
     case 'bits': t.done=true; G.bits+=t.n; c.log.push(`${t.n} ⬡`); try{ SFX.bits(); }catch(e){} toast(`+${t.n} ⬡`); setCrawlHint(`Picked up ${t.n} bits.`); break;
     case 'hazard': setCrawlHint(`Hazard crossed, two moves spent. ${c.moves} left.`); break;
     default: setCrawlHint(c.moves<=4?`${c.moves} moves left — choose carefully.`:`${c.moves} moves left.`);
   }
   save(); renderCrawl();
-  if (c.moves<=0) endCrawl('Out of moves.');
+  if (c.moves<=0 || !canStep(c)) endCrawl('Out of moves.');
 }
+// any adjacent tile you could still afford to enter? (walls are solid; a hazard needs 2)
+function canStep(c){ for (const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]){ const x=c.px+dx,y=c.py+dy; if(x<0||y<0||x>=c.w||y>=c.h) continue; const t=c.tiles[y*c.w+x]; if(t.k==='wall') continue; if(t.k==='hazard'?c.moves>=2:c.moves>=1) return true; } return false; }
+// cheapest walk from where you stand to the Deep Signal, or null once it is settled
+function deepDist(c){ const walls=c.tiles.map(t=>t.k==='wall'), hz=c.tiles.map(t=>t.k==='hazard'); const di=c.tiles.findIndex(t=>t.k==='deep'&&!t.done); if(di<0) return null; const d=crawlDist(walls,c.px,c.py,hz)[di]; return d===Infinity?null:d; }
 // called from the scan result / encounter exit: the pending tile is spent, and a Deep only counts as reached when its lock held
 function crawlTileDone(reached){ const c=G.crawl; if(!c||!c.pending) return; const t=c.tiles[c.pending.y*c.w+c.pending.x]; if(t){ t.done=true; if(t.k==='deep'){ t.reached=!!reached; if(reached) G.stats.deep=(G.stats.deep||0)+1; } } c.pending=null; save(); }
 function crawlPing(){
@@ -6591,7 +6618,7 @@ function endCrawl(reason){
 }
 $('#cr-ping').addEventListener('click', crawlPing);
 $('#cr-extract').addEventListener('click', async ()=>{ if(!G.crawl||G.crawl.over) return; if(await askConfirm('Extract now?','Leave the Data Dungeon here. You will need to scan again for the next one.','Extract')) endCrawl('Extracted.'); });
-$('#cr-back').addEventListener('click', ()=>{ enterHub(); });
+$('#cr-back').addEventListener('click', ()=>{ if(G.crawl&&!G.crawl.over) toast('Run held — re-enter from World.'); enterHub(); });
 
 // ============================================================
 // LINKER CONNECTION — bits don't only train creatures; they strengthen the phone's connection to the Codex.
@@ -6658,13 +6685,15 @@ function removeCreature(c){ G.creatures=G.creatures.filter(x=>x.uid!==c.uid); G.
 function decompile(c){
   const bits=decompileBits(c); G.bits+=bits; G.stats.decompiled=(G.stats.decompiled||0)+1;
   const card=ALL_ATTACKS[rollCache('attack')]; invAdd('attacks',card.id);
-  removeCreature(c); save();
+  removeCreature(c);
+  if (!G.squad.length && G.creatures.length) G.squad.push(G.creatures[0].uid);   // never leave the squad empty while something is stored
+  save();
   return { bits, card };
 }
-// "spare" = every creature of a species beyond the best one (highest quality, then level), not counting the active three
+// "spare" = every creature of a species beyond the best one (highest quality, then level), not counting the squad (active line and bench)
 function spareCreatures(){
   const by={}; G.creatures.forEach(c=>{ (by[c.sp]=by[c.sp]||[]).push(c); });
-  const active=new Set(G.squad.slice(0,ACTIVE_MAX)); const out=[];
+  const active=new Set(G.squad.slice(0,ACTIVE_MAX+BENCH_MAX)); const out=[];
   Object.values(by).forEach(list=>{ if(list.length<2) return; const sorted=list.slice().sort((a,b)=>(b.quality-a.quality)||(b.lvl-a.lvl)); sorted.slice(1).forEach(c=>{ if(!active.has(c.uid)) out.push(c); }); });
   return out;
 }
@@ -6680,7 +6709,7 @@ async function askDecompile(c){
 }
 function openSpares(){
   const spares=spareCreatures();
-  const body=[ el('p',{class:'muted',style:'font-size:12px;margin-top:0'},'Every creature beyond the best of its species (active slots excluded). Decompile turns them into bits and cards.') ];
+  const body=[ el('p',{class:'muted',style:'font-size:12px;margin-top:0'},'Every creature beyond the best of its species (squad excluded). Decompile turns them into bits and cards.') ];
   if (!spares.length){ body.push(el('p',{class:'muted'},'No spares right now.')); openModal('Spares', body); return; }
   const totalBits=spares.reduce((n,c)=>n+decompileBits(c),0);
   body.push(el('div',{class:'row',style:'gap:8px;margin-bottom:10px'},
@@ -6930,7 +6959,11 @@ async function cloudPull(){
     CLOUD.pulled=true;
     if (!snap.exists){ CLOUD.status='cloud · empty'; return; }
     const d=snap.data(); const local=load(); const localAt=(local&&local.savedAt)||0;
+    // the cloud copy has to read as a save before it replaces the local one
+    let ok=false; try{ const g=normalizeState(JSON.parse(d.json)); ok=!!(g && g.handle && Array.isArray(g.creatures)); }catch(e){}
+    if (!ok){ CLOUD.status='cloud · damaged copy'; CLOUD.at=d.at; refreshTitleSub(); return; }
     if (d.at>localAt && !G){ try{ localStorage.setItem(SAVE_KEY, d.json); }catch(e){} CLOUD.status='cloud · restored'; }
+    else if (d.at>localAt && G){ CLOUD.status='cloud · newer copy'; CLOUD.newer=d.json; toast('A newer save is in the cloud — open Save & sync to restore it.'); }
     else CLOUD.status='cloud · synced';
     CLOUD.at=d.at;
   }catch(e){ CLOUD.pulled=true; CLOUD.status='cloud · unavailable'; }
@@ -6981,6 +7014,7 @@ function openSync(){
     el('div',{class:'kv'},el('span',{},'Cloud'),el('span',{},cloudStatusText())),
     el('p',{class:'muted',style:'font-size:12px;margin:8px 0 0'},'Cloud sync runs when this page is opened inside claude.ai. A home-screen copy keeps its own save on the phone; use a save code to move progress between the two.'));
   body.push(st);
+  if (CLOUD.newer){ st.append(el('button',{class:'btn small primary block',style:'margin-top:8px',onclick:async()=>{ let g; try{ g=normalizeState(JSON.parse(CLOUD.newer)); }catch(e){ toast('The cloud copy could not be read.'); return; } if(!g){ toast('The cloud copy could not be read.'); return; } if(!(await askConfirm('Restore the cloud save?',`${g.handle} · ${g.creatures.length} creatures replaces the save on this device.`,'Restore'))) { openSync(); return; } G=g; CLOUD.newer=null; CLOUD.status='cloud · restored'; save(); closeModal(); toast('Cloud save restored.'); enterHub(); }},'Restore the newer cloud save')); }
   // export
   const ex=el('div',{class:'panel'}, el('h3',{style:'margin-bottom:8px'},'Export save code'));
   const ta=el('textarea',{class:'text',readonly:'1',rows:'3',style:'width:100%;font-family:var(--mono);font-size:10px;word-break:break-all'});
@@ -7461,7 +7495,7 @@ const MUSIC = (function(){
     S.wave={born:now, cols:RARE?FCOL:[HOLO,FCOL[0],FCOL[4],HOLO,'#fff'], again:1};
     spawnRain(); S.rainAlpha=0; (function fade(){ if(S.phase!=='decode') return; S.rainAlpha=Math.min(0.9,S.rainAlpha+0.06); if(S.rainAlpha<0.9) requestAnimationFrame(fade); })();
     // boot log
-    const lines=['> linker os 0.40.0 · secure boot','> biometric … <b>match</b>'+(handle?` · ${handle}`:''),`> mounting regions … <b>${REGIONS.length}/${REGIONS.length}</b>`,'> codex gods · handshake … <b>ok</b>',`> species index … <b>${Object.keys(SPECIES).length}</b> recorded`,'> card store … <b>decrypted</b>','> signal lock … <b>calibrated</b>',`> wardens online … <b>${ZONES.length}</b>`,`> zone … <b>${saved?ZONES[saved.zone].name:'Threshold Relay'}</b>`,'> link established'];
+    const lines=['> linker os 0.41.0 · secure boot','> biometric … <b>match</b>'+(handle?` · ${handle}`:''),`> mounting regions … <b>${REGIONS.length}/${REGIONS.length}</b>`,'> codex gods · handshake … <b>ok</b>',`> species index … <b>${Object.keys(SPECIES).length}</b> recorded`,'> card store … <b>decrypted</b>','> signal lock … <b>calibrated</b>',`> wardens online … <b>${ZONES.length}</b>`,`> zone … <b>${saved?ZONES[saved.zone].name:'Threshold Relay'}</b>`,'> link established'];
     blog.style.transition='opacity .3s'; blog.style.opacity='1';
     lines.forEach((l,i)=>setTimeout(()=>{ if(S.phase!=='decode') return; blog.append(el('span',{html:l})); while(blog.children.length>7) blog.firstChild.remove(); snd(()=>tone(1500+Math.random()*400,0.02,'square',0.02)); }, i*150));
     // faction reels: spin, then stop one by one, then strobe together
