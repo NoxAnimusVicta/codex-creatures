@@ -927,7 +927,7 @@ h1.wfall{text-shadow:0 0 22px color-mix(in srgb,var(--wc) 70%,transparent);anima
 
   <!-- TITLE — the unlocked phone. Same stat line, same mark, same centre as the lock screen. -->
   <section class="screen title-screen" id="s-title">
-    <div class="tstat"><span>LINKER OS · <b>v0.41.0</b></span><span>STATUS · <b>LINKED</b></span></div>
+    <div class="tstat"><span>LINKER OS · <b>v0.41.1</b></span><span>STATUS · <b>LINKED</b></span></div>
     <div class="tmark" id="title-mark"></div>
     <h1>Codex <span class="sub">Creatures</span></h1>
     <p class="ttag">There is a coastline rendering on the world's spare compute. Your phone can reach it.</p>
@@ -936,7 +936,7 @@ h1.wfall{text-shadow:0 0 22px color-mix(in srgb,var(--wc) 70%,transparent);anima
       <button class="trow" id="btn-new"><i>›</i><div><b>New link</b><span id="new-sub">register a new Linker</span></div></button>
       <button class="trow" id="btn-sync"><i>⇅</i><div><b>Save &amp; sync</b><span id="sync-sub">cloud · save codes · add to home screen</span></div></button>
     </div>
-    <div class="tfoot">SANCTIONED BY THE GODS OF THE CODEX · LINKER OS v0.41.0</div>
+    <div class="tfoot">SANCTIONED BY THE GODS OF THE CODEX · LINKER OS v0.41.1</div>
   </section>
 
   <!-- INTRO -->
@@ -5341,7 +5341,7 @@ function fmtStat(c){ return STAT_KEYS.map(k=>`${STAT_LABEL[k].slice(0,2).toUpper
 function initTitle(){
   const saved = load(); const has = !!saved;
   const cont=$('#btn-continue'); cont.hidden = !has;
-  if (has){ const n=saved.creatures.length; $('#cont-sub').textContent = `${saved.handle} · ${typeof standingRank==='function'?standingRank(saved).name:''} · ${n} creature${n===1?'':'s'} · ${saved.stats.wins||0} win${(saved.stats.wins||0)===1?'':'s'}${typeof CLOUD!=='undefined'&&CLOUD.ready?' · '+CLOUD.status.replace('cloud · ',''):''}`; }
+  if (has){ const n=saved.creatures.length; $('#cont-sub').textContent = `${saved.handle} · ${(()=>{ try{ return standingRank(saved).name; }catch(e){ return ''; } })()} · ${n} creature${n===1?'':'s'} · ${saved.stats.wins||0} win${(saved.stats.wins||0)===1?'':'s'}${typeof CLOUD!=='undefined'&&CLOUD.ready?' · '+CLOUD.status.replace('cloud · ',''):''}`; }
   const ss=$('#sync-sub'); if (ss) ss.textContent = (typeof CLOUD!=='undefined'&&CLOUD.ready) ? CLOUD.status+' · save codes · home screen' : 'save codes · add to home screen';
   $('#new-sub').textContent = has ? 'register a new Linker · overwrites the current one' : 'register a new Linker';
   const mark=$('#title-mark'); if(mark && !mark.firstChild) mark.append(LOGO.make(150));
@@ -6430,7 +6430,7 @@ function endBattle(){
 
 // ---- Boot ----
 window.addEventListener('resize', ()=>{ if($('#s-battle').classList.contains('active') && !$('#duel').classList.contains('on')) renderBoard(); });
-initTitle();
+// initTitle() runs from boot.js, once every module is defined (calling it here reached the standing constants before they existed and killed the whole script on any device with a save)
 
 // ============================================================
 // DATA DUNGEON — a scan in a zone finds a Data Dungeon: a short, fogged run through the substrate with a fixed move budget.
@@ -7315,6 +7315,7 @@ const MUSIC = (function(){
   const HOLO = '#3FE3D2';
   const saved = load();
   const handle = saved ? saved.handle : null;
+  try{ initTitle(); }catch(e){ console.error('title', e); }
 
   // ---------- DOM ----------
   // ambient colour field behind the lock screen and the title (fades out once you enter the Linker)
@@ -7495,7 +7496,7 @@ const MUSIC = (function(){
     S.wave={born:now, cols:RARE?FCOL:[HOLO,FCOL[0],FCOL[4],HOLO,'#fff'], again:1};
     spawnRain(); S.rainAlpha=0; (function fade(){ if(S.phase!=='decode') return; S.rainAlpha=Math.min(0.9,S.rainAlpha+0.06); if(S.rainAlpha<0.9) requestAnimationFrame(fade); })();
     // boot log
-    const lines=['> linker os 0.41.0 · secure boot','> biometric … <b>match</b>'+(handle?` · ${handle}`:''),`> mounting regions … <b>${REGIONS.length}/${REGIONS.length}</b>`,'> codex gods · handshake … <b>ok</b>',`> species index … <b>${Object.keys(SPECIES).length}</b> recorded`,'> card store … <b>decrypted</b>','> signal lock … <b>calibrated</b>',`> wardens online … <b>${ZONES.length}</b>`,`> zone … <b>${saved?ZONES[saved.zone].name:'Threshold Relay'}</b>`,'> link established'];
+    const lines=['> linker os 0.41.1 · secure boot','> biometric … <b>match</b>'+(handle?` · ${handle}`:''),`> mounting regions … <b>${REGIONS.length}/${REGIONS.length}</b>`,'> codex gods · handshake … <b>ok</b>',`> species index … <b>${Object.keys(SPECIES).length}</b> recorded`,'> card store … <b>decrypted</b>','> signal lock … <b>calibrated</b>',`> wardens online … <b>${ZONES.length}</b>`,`> zone … <b>${saved?ZONES[saved.zone].name:'Threshold Relay'}</b>`,'> link established'];
     blog.style.transition='opacity .3s'; blog.style.opacity='1';
     lines.forEach((l,i)=>setTimeout(()=>{ if(S.phase!=='decode') return; blog.append(el('span',{html:l})); while(blog.children.length>7) blog.firstChild.remove(); snd(()=>tone(1500+Math.random()*400,0.02,'square',0.02)); }, i*150));
     // faction reels: spin, then stop one by one, then strobe together
