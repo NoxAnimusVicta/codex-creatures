@@ -11,7 +11,7 @@ window.addEventListener('error', function(e){
   var d=document.createElement('div'); d.id='bootfail';
   d.style.cssText='position:fixed;inset:0;z-index:99999;background:#070B14;color:#DCE6F5;font:14px/1.5 -apple-system,system-ui,sans-serif;padding:max(24px,env(safe-area-inset-top)) 20px 24px;overflow:auto';
   var save=null; try{ save=localStorage.getItem('codex-creatures-v1'); }catch(x){}
-  d.innerHTML='<div style="font-size:11px;letter-spacing:.14em;color:#8A9AB4;margin-bottom:6px">LINKER OS · v0.41.2 · BOOT FAILED</div>'
+  d.innerHTML='<div style="font-size:11px;letter-spacing:.14em;color:#8A9AB4;margin-bottom:6px">LINKER OS · v0.41.3 · BOOT FAILED</div>'
     +'<h2 style="margin:0 0 10px;font-size:20px">The Linker did not start</h2>'
     +'<p style="color:#8A9AB4;margin:0 0 14px">Your save is untouched. Screenshot this line:</p>'
     +'<pre style="white-space:pre-wrap;word-break:break-word;background:#0b1322;border:1px solid #1e2a40;border-radius:8px;padding:10px;font-size:12px;margin:0 0 16px">'+String(msg).replace(/</g,'&lt;')+where+'</pre>'
@@ -949,7 +949,7 @@ h1.wfall{text-shadow:0 0 22px color-mix(in srgb,var(--wc) 70%,transparent);anima
 
   <!-- TITLE — the unlocked phone. Same stat line, same mark, same centre as the lock screen. -->
   <section class="screen title-screen" id="s-title">
-    <div class="tstat"><span>LINKER OS · <b>v0.41.2</b></span><span>STATUS · <b>LINKED</b></span></div>
+    <div class="tstat"><span>LINKER OS · <b>v0.41.3</b></span><span>STATUS · <b>LINKED</b></span></div>
     <div class="tmark" id="title-mark"></div>
     <h1>Codex <span class="sub">Creatures</span></h1>
     <p class="ttag">There is a coastline rendering on the world's spare compute. Your phone can reach it.</p>
@@ -958,7 +958,7 @@ h1.wfall{text-shadow:0 0 22px color-mix(in srgb,var(--wc) 70%,transparent);anima
       <button class="trow" id="btn-new"><i>›</i><div><b>New link</b><span id="new-sub">register a new Linker</span></div></button>
       <button class="trow" id="btn-sync"><i>⇅</i><div><b>Save &amp; sync</b><span id="sync-sub">cloud · save codes · add to home screen</span></div></button>
     </div>
-    <div class="tfoot">SANCTIONED BY THE GODS OF THE CODEX · LINKER OS v0.41.2</div>
+    <div class="tfoot">SANCTIONED BY THE GODS OF THE CODEX · LINKER OS v0.41.3</div>
   </section>
 
   <!-- INTRO -->
@@ -6932,7 +6932,7 @@ const ACHIEVEMENTS = [
   { id:'connection',  name:'Strong signal',      text:'Max out the Linker Connection.',                 pts:40, test:g=>RIG_ORDER.every(k=>(g.rig[k]||0)>=RIG_MAX) },
 ];
 // rank by points; the names climb the layers, because standing in the Codex is a matter of how far up you are known
-const RANKS = [ [0,'Unregistered'], [5,'Relay Linker'], [40,'Uplink Linker'], [90,'Trunk Linker'], [160,'Deep Linker'], [250,'Core Linker'], [360,'Apex Linker'], [480,'Spire Linker'] ];
+const RANKS = [ [0,'Unranked'], [5,'Novice Linker'], [40,'Apprentice Linker'], [90,'Journeyman Linker'], [160,'Veteran Linker'], [250,'Expert Linker'], [360,'Master Linker'], [480,'Grandmaster Linker'] ];   // plain titles (Jake, 9 Sep 2026 — the layer-name set read badly)
 function wardensBeaten(g){ return Object.keys(g.beaten||{}).filter(k=>k.startsWith('w_')).length; }
 function standingPoints(g){ g=g||G; return ACHIEVEMENTS.reduce((s,a)=>s+((g.ach&&g.ach[a.id])?a.pts:0),0); }
 function standingRank(g){ const p=standingPoints(g); let r=RANKS[0]; RANKS.forEach(x=>{ if(p>=x[0]) r=x; }); return { name:r[1], pts:p, next:RANKS.find(x=>x[0]>p)||null }; }
@@ -7518,7 +7518,7 @@ const MUSIC = (function(){
     S.wave={born:now, cols:RARE?FCOL:[HOLO,FCOL[0],FCOL[4],HOLO,'#fff'], again:1};
     spawnRain(); S.rainAlpha=0; (function fade(){ if(S.phase!=='decode') return; S.rainAlpha=Math.min(0.9,S.rainAlpha+0.06); if(S.rainAlpha<0.9) requestAnimationFrame(fade); })();
     // boot log
-    const lines=['> linker os 0.41.2 · secure boot','> biometric … <b>match</b>'+(handle?` · ${handle}`:''),`> mounting regions … <b>${REGIONS.length}/${REGIONS.length}</b>`,'> codex gods · handshake … <b>ok</b>',`> species index … <b>${Object.keys(SPECIES).length}</b> recorded`,'> card store … <b>decrypted</b>','> signal lock … <b>calibrated</b>',`> wardens online … <b>${ZONES.length}</b>`,`> zone … <b>${saved?ZONES[saved.zone].name:'Threshold Relay'}</b>`,'> link established'];
+    const lines=['> linker os 0.41.3 · secure boot','> biometric … <b>match</b>'+(handle?` · ${handle}`:''),`> mounting regions … <b>${REGIONS.length}/${REGIONS.length}</b>`,'> codex gods · handshake … <b>ok</b>',`> species index … <b>${Object.keys(SPECIES).length}</b> recorded`,'> card store … <b>decrypted</b>','> signal lock … <b>calibrated</b>',`> wardens online … <b>${ZONES.length}</b>`,`> zone … <b>${saved?ZONES[saved.zone].name:'Threshold Relay'}</b>`,'> link established'];
     blog.style.transition='opacity .3s'; blog.style.opacity='1';
     lines.forEach((l,i)=>setTimeout(()=>{ if(S.phase!=='decode') return; blog.append(el('span',{html:l})); while(blog.children.length>7) blog.firstChild.remove(); snd(()=>tone(1500+Math.random()*400,0.02,'square',0.02)); }, i*150));
     // faction reels: spin, then stop one by one, then strobe together
